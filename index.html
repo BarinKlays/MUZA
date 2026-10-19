@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LoveLink</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #0b0b0e;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 12px 12px 90px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        .app-header {
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .app-logo {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .app-logo span { color: #ff2d55; }
+        .app-subtitle {
+            font-size: 11px;
+            color: #8e8e93;
+            margin: 2px 0 0 0;
+        }
+
+        /* ===== ЭКРАНЫ ===== */
+        .screen {
+            width: 100%;
+            max-width: 380px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .screen.is-active {
+            display: flex;
+        }
+
+        .user-top-bar {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .current-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .user-avatar-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid #ff2d55;
+            overflow: hidden;
+        }
+        .user-avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-meta { display: flex; flex-direction: column; }
+        .user-meta-name { font-size: 13px; font-weight: bold; }
+        .user-meta-status {
+            font-size: 11px;
+            color: #34c759;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .user-meta-status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background-color: #34c759;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .rating-box {
+            background: #16161f;
+            border-radius: 20px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #242430;
+        }
+        .rating-heart { color: #ff2d55; font-size: 12px; }
+        .rating-num { font-size: 13px; font-weight: bold; }
+        .rating-progress-bg {
+            width: 60px;
+            height: 5px;
+            background: #242430;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .rating-progress-fill {
+            width: 87%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff2d55, #ff5e7e);
+        }
+
+        .main-card {
+            background: #12121a;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 380px;
+            overflow: hidden;
+            border: 1px solid #1f1f2e;
+            position: relative;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .swipe-left {
+            transform: translateX(-150px) rotate(-15deg);
+            opacity: 0;
+        }
+        .swipe-right {
+            transform: translateX(150px) rotate(15deg);
+            opacity: 0;
+        }
+        .fade-in {
+            animation: fadeInCard 0.3s ease forwards;
+        }
+        .star-pulse {
+            animation: starPulse 0.5s ease;
+        }
+        @keyframes starPulse {
+            0%   { transform: scale(1);    box-shadow: 0 0 0 rgba(100,210,255,0); }
+            40%  { transform: scale(1.03); box-shadow: 0 0 30px rgba(100,210,255,0.6); }
+            100% { transform: scale(1);    box-shadow: 0 0 0 rgba(100,210,255,0); }
+        }
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: scale(0.95); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .card-image-holder {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: #1c1c24;
+            overflow: hidden;
+            touch-action: pan-y;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .photo-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+            will-change: transform;
+        }
+        .photo-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            background: #1c1c24;
+        }
+        .photo-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            -webkit-user-drag: none;
+        }
+
+        .card-counter {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .tap-zone {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 40%;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .tap-zone-left { left: 0; }
+        .tap-zone-right { right: 0; }
+
+        .photo-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.45);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 4;
+        }
+        .photo-arrow-left { left: 8px; }
+        .photo-arrow-right { right: 8px; }
+        @media (hover: hover) and (pointer: fine) {
+            .photo-arrow { display: flex; }
+        }
+
+        .card-details { padding: 16px; }
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 4px 0;
+        }
+        .card-geo {
+            font-size: 13px;
+            color: #ff2d55;
+            margin: 0 0 12px 0;
+        }
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .card-tag-item {
+            background: #1f1f2e;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #e5e5ea;
+            border: 1px solid #2c2c3e;
+        }
+        .card-bio-text {
+            font-size: 13px;
+            color: #d1d1d6;
+            line-height: 1.4;
+            margin: 0 0 16px 0;
+        }
+
+        .music-box {
+            background: #161622;
+            border-radius: 16px;
+            padding: 12px;
+            border: 1px solid #242435;
+        }
+        .music-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .music-cover {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #242430;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .music-info { flex-grow: 1; }
+        .music-name { font-size: 13px; font-weight: bold; margin: 0; }
+        .music-artist { font-size: 11px; color: #8e8e93; margin: 2px 0 0 0; }
+        .music-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .music-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .music-btn-play {
+            width: 28px;
+            height: 28px;
+            background: #ff2d55;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        .music-timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #636366;
+            margin-top: 4px;
+        }
+        .music-line-bg {
+            flex-grow: 1;
+            height: 3px;
+            background: #2c2c3e;
+            border-radius: 2px;
+            margin: 0 8px;
+        }
+        .music-line-fill {
+            width: 0%;
+            height: 100%;
+            background: #ff2d55;
+            border-radius: 2px;
+        }
+
+        .action-buttons-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+            width: 100%;
+            max-width: 380px;
+        }
+        .circle-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            background: #161622;
+            color: #ffffff;
+            border: 1px solid #242435;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s ease, background 0.2s ease;
+        }
+        .circle-btn:active { transform: scale(0.9); }
+        .circle-btn-dislike { color: #8e8e93; font-size: 16px; }
+        .circle-btn-like { background: #ff2d55; color: #ffffff; font-size: 20px; width: 58px; height: 58px; }
+        .circle-btn-star { color: #64d2ff; }
+        .circle-btn-star.is-fav {
+            background: rgba(100, 210, 255, 0.15);
+            border-color: #64d2ff;
+            color: #64d2ff;
+        }
+
+        .bottom-nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 380px;
+            background: #12121a;
+            border-top: 1px solid #1f1f2e;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px)) 0;
+            z-index: 100;
+        }
+        .nav-button-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: #8e8e93;
+            cursor: pointer;
+            font-size: 10px;
+            gap: 4px;
+            width: 60px;
+        }
+        .nav-button-item.is-active { color: #ff2d55; }
+        .nav-button-icon { font-size: 20px; }
+
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f1f2e;
+            color: #ffffff;
+            border: 1px solid #2c2c3e;
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 200;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        .toast.is-visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============================================ */
+        /* ============ ЭКРАН ПРОФИЛЯ ================= */
+        /* ============================================ */
+        .profile-cover {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #1c1c24;
+            border: 1px solid #1f1f2e;
+        }
+        .profile-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-cover::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(11,11,14,0.9) 100%);
+        }
+        .profile-cover-info {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 14px;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .profile-name-block h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+        }
+        .profile-name-block p {
+            margin: 2px 0 0 0;
+            font-size: 12px;
+            color: #d1d1d6;
+        }
+        .edit-btn {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 7px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+        }
+
+        .profile-section {
+            width: 100%;
+            margin-top: 14px;
+            background: #12121a;
+            border: 1px solid #1f1f2e;
+            border-radius: 18px;
+            padding: 14px;
+            box-sizing: border-box;
+        }
+        .profile-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #8e8e93;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        /* Рейтинг в профиле */
+        .profile-rating-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .profile-rating-num {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ff2d55;
+            line-height: 1;
+        }
+        .profile-rating-bar-wrap { flex-grow: 1; }
+        .profile-rating-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #242430;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .profile-rating-bar-fill {
+            width: 87%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff2d55, #ff5e7e);
+        }
+        .profile-rating-caption {
+            font-size: 11px;
+            color: #8e8e93;
+            margin-top: 6px;
+        }
+
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .stat-cell {
+            background: #161622;
+            border: 1px solid #242435;
+            border-radius: 14px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+        .stat-cell .stat-value {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .stat-cell .stat-label {
+            font-size: 10px;
+            color: #8e8e93;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        /* О себе */
+        .profile-bio {
+            font-size: 13px;
+            color: #d1d1d6;
+            line-height: 1.5;
+            margin: 0 0 10px 0;
+        }
+
+        /* Мои фото */
+        .my-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+        .my-photo {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #1c1c24;
+            cursor: pointer;
+        }
+        .my-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+        }
+        .my-photo:active img { transform: scale(0.96); }
+
+        /* Избранное в профиле */
+        .fav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .fav-empty {
+            font-size: 12px;
+            color: #8e8e93;
+            text-align: center;
+            padding: 12px 0;
+        }
+        .fav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #161622;
+            border: 1px solid #242435;
+            border-radius: 14px;
+            padding: 8px;
+        }
+        .fav-item img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .fav-item-info { flex-grow: 1; min-width: 0; }
+        .fav-item-name {
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .fav-item-sub {
+            font-size: 11px;
+            color: #8e8e93;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .fav-item-remove {
+            background: none;
+            border: none;
+            color: #ff2d55;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+        .fav-item-remove:active { background: rgba(255,45,85,0.12); }
+
+        /* Настройки */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 4px;
+            border-bottom: 1px solid #1f1f2e;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .settings-row:last-child { border-bottom: none; }
+        .settings-row .settings-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .settings-row .settings-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        .settings-row .settings-chev {
+            color: #636366;
+            font-size: 14px;
+        }
+
+        /* Модалка просмотра фото */
+        .photo-viewer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .photo-viewer.is-open { display: flex; }
+        .photo-viewer img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 14px;
+            object-fit: contain;
+        }
+        .photo-viewer-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Заголовок экрана профиля */
+        .profile-heading {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .profile-heading h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .profile-heading .settings-gear {
+            background: #161622;
+            border: 1px solid #242435;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= ЭКРАН 1: АНКЕТЫ ================= -->
+    <div id="screen-cards" class="screen is-active">
+        <div class="app-header">
+            <h1 class="app-logo">LoveLink<span>♥</span></h1>
+            <p class="app-subtitle">Найди свою историю</p>
+        </div>
+
+        <div class="user-top-bar">
+            <div class="current-user">
+                <div class="user-avatar-wrap">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" alt="Аватар">
+                </div>
+                <div class="user-meta">
+                    <span class="user-name">Алина, 23</span>
+                    <span class="user-meta-status">Онлайн</span>
+                </div>
+            </div>
+
+            <div class="rating-box">
+                <span class="rating-heart">❤️</span>
+                <span class="rating-num">8.7</span>
+                <div class="rating-progress-bg">
+                    <div class="rating-progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="card-container" class="main-card">
+            <div id="card-image-holder" class="card-image-holder">
+                <div id="photo-track" class="photo-track"></div>
+                <div id="card-counter" class="card-counter">1/6</div>
+                <div class="tap-zone tap-zone-left" onclick="prevPhoto(event)"></div>
+                <div class="tap-zone tap-zone-right" onclick="nextPhoto(event)"></div>
+                <button class="photo-arrow photo-arrow-left" onclick="prevPhoto(event)">‹</button>
+                <button class="photo-arrow photo-arrow-right" onclick="nextPhoto(event)">›</button>
+            </div>
+
+            <div class="card-details">
+                <h2 id="card-title" class="card-title">Загрузка...</h2>
+                <p id="card-geo" class="card-geo">📍 Загрузка...</p>
+
+                <div id="card-tags" class="card-tags"></div>
+
+                <p id="card-bio" class="card-bio-text"></p>
+
+                <div class="music-box">
+                    <div class="music-top">
+                        <div class="music-cover">🎵</div>
+                        <div class="music-info">
+                            <p id="music-name" class="music-name">Sweater Weather</p>
+                            <p id="music-artist" class="music-artist">The Neighbourhood</p>
+                        </div>
+                        <div class="music-buttons">
+                            <button class="music-btn">⏮</button>
+                            <button class="music-btn music-btn-play" onclick="togglePlay()">▶️</button>
+                            <button class="music-btn">⏭</button>
+                            <button class="music-btn" style="color: #ff2d55;">❤️</button>
+                        </div>
+                    </div>
+                    <div class="music-timeline">
+                        <span id="music-current-time">0:00</span>
+                        <div class="music-line-bg">
+                            <div id="music-progress" class="music-line-fill"></div>
+                        </div>
+                        <span id="music-total-time">0:30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="action-buttons" class="action-buttons-row">
+            <button class="circle-btn circle-btn-dislike" onclick="clickAction('dislike')">✕</button>
+            <button class="circle-btn circle-btn-like" onclick="clickAction('like')">❤️</button>
+            <button id="star-btn" class="circle-btn circle-btn-star" onclick="clickAction('star')">⭐</button>
+        </div>
+    </div>
+
+    <!-- ================= ЭКРАН 2: ПРОФИЛЬ ================= -->
+    <div id="screen-profile" class="screen">
+        <div class="profile-heading">
+            <h2>Мой профиль</h2>
+            <button class="settings-gear" onclick="showToast('Настройки скоро 😉')">⚙️</button>
+        </div>
+
+        <!-- Обложка с фото и именем -->
+        <div class="profile-cover">
+            <img id="profile-cover-img" src="" alt="Моё фото">
+            <div class="profile-cover-info">
+                <div class="profile-name-block">
+                    <h2 id="my-name">Алина, 23</h2>
+                    <p id="my-geo">📍 Москва</p>
+                </div>
+                <button class="edit-btn" onclick="showToast('Редактирование профиля скоро 😉')">Изменить</button>
+            </div>
+        </div>
+
+        <!-- Рейтинг -->
+        <div class="profile-section">
+            <p class="profile-section-title">Мой рейтинг</p>
+            <div class="profile-rating-row">
+                <div class="profile-rating-num">8.7</div>
+                <div class="profile-rating-bar-wrap">
+                    <div class="profile-rating-bar-bg">
+                        <div class="profile-rating-bar-fill"></div>
+                    </div>
+                    <div class="profile-rating-caption">Топ 12% в вашем городе · 87 из 100</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="profile-section">
+            <p class="profile-section-title">Статистика</p>
+            <div class="stats-grid">
+                <div class="stat-cell">
+                    <div class="stat-value" id="stat-likes">128</div>
+                    <div class="stat-label">Лайки</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-value" id="stat-matches">14</div>
+                    <div class="stat-label">Мэтчи</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-value" id="stat-views">1.2k</div>
+                    <div class="stat-label">Просмотры</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- О себе -->
+        <div class="profile-section">
+            <p class="profile-section-title">О себе</p>
+            <p class="profile-bio">Люблю долгие прогулки, хорошую музыку и людей, с которыми не скучно 💞 Ищу свою историю.</p>
+            <div class="card-tags" style="margin-bottom:0;">
+                <div class="card-tag-item">Кино</div>
+                <div class="card-tag-item">Музыка</div>
+                <div class="card-tag-item">Путешествия</div>
+                <div class="card-tag-item">Книги</div>
+            </div>
+        </div>
+
+        <!-- Мои фото -->
+        <div class="profile-section">
+            <p class="profile-section-title">Мои фото</p>
+            <div id="my-photos-grid" class="my-photos-grid"></div>
+        </div>
+
+        <!-- Избранное -->
+        <div class="profile-section">
+            <p class="profile-section-title">Избранное</p>
+            <div id="fav-list" class="fav-list"></div>
+        </div>
+
+        <!-- Настройки -->
+        <div class="profile-section">
+            <p class="profile-section-title">Настройки</p>
+            <div class="settings-list">
+                <div class="settings-row" onclick="showToast('Уведомления скоро 😉')">
+                    <div class="settings-left"><span class="settings-icon">🔔</span> Уведомления</div>
+                    <span class="settings-chev">›</span>
+                </div>
+                <div class="settings-row" onclick="showToast('Приватность скоро 😉')">
+                    <div class="settings-left"><span class="settings-icon">🔒</span> Приватность</div>
+                    <span class="settings-chev">›</span>
+                </div>
+                <div class="settings-row" onclick="showToast('Помощь скоро 😉')">
+                    <div class="settings-left"><span class="settings-icon">❓</span> Помощь и поддержка</div>
+                    <span class="settings-chev">›</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Нижний таб-бар -->
+    <div class="bottom-nav-bar">
+        <button id="nav-cards" class="nav-button-item is-active" onclick="changeTab('cards', event)">
+            <span class="nav-button-icon">🎴</span>
+            <span>Анкеты</span>
+        </button>
+        <button id="nav-chats" class="nav-button-item" onclick="changeTab('chats', event)">
+            <span class="nav-button-icon">💬</span>
+            <span>Чаты</span>
+        </button>
+        <button id="nav-top" class="nav-button-item" onclick="changeTab('top', event)">
+            <span class="nav-button-icon">🔥</span>
+            <span>Топ-100</span>
+        </button>
+        <button id="nav-profile" class="nav-button-item" onclick="changeTab('profile', event)">
+            <span class="nav-button-icon">👤</span>
+            <span>Профиль</span>
+        </button>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Модалка просмотра фото -->
+    <div id="photo-viewer" class="photo-viewer" onclick="closePhotoViewer(event)">
+        <button class="photo-viewer-close" onclick="closePhotoViewer(event)">✕</button>
+        <img id="photo-viewer-img" src="" alt="Просмотр">
+    </div>
+
+    <audio id="audio-player" src=""></audio>
+
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
+        // ===== ДАННЫЕ =====
+        const profiles = [
+            {
+                id: 1,
+                name: "Алина",
+                age: 23,
+                geo: "Москва, 3 км",
+                photos: [
+                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&q=80&w=600"
+                ],
+                tags: ["Кино", "Музыка", "Путешествия", "Книги"],
+                bio: "Люблю долгие прогулки, хорошую музыку и людей, с которыми не скучно 💞",
+                track: "Sweater Weather",
+                artist: "The Neighbourhood",
+                audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+            },
+            {
+                id: 2,
+                name: "Максим",
+                age: 25,
+                geo: "Санкт-Петербург, 12 км",
+                photos: [
+                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=600"
+                ],
+                tags: ["Рок", "Спорт", "Гитара", "Концерты"],
+                bio: "Ищу кого-то, с кем можно пойти на концерт любимой группы или просто залипнуть в винил 🎸",
+                track: "Blinding Lights",
+                artist: "The Weeknd",
+                audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+            },
+            {
+                id: 3,
+                name: "Екатерина",
+                age: 21,
+                geo: "Краснодар, 1.5 км",
+                photos: [
+                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=600",
+                    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600"
+                ],
+                tags: ["Техно", "Танцы", "Фестивали", "Фотография"],
+                bio: "Слушаю электронную музыку 24/7. Погнали на рейв в эти выходные? ⚡",
+                track: "Starlight",
+                artist: "Muse",
+                audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+            }
+        ];
+
+        // Мой профиль (текущий пользователь)
+        const myProfile = {
+            name: "Алина",
+            age: 23,
+            geo: "Москва",
+            bio: "Люблю долгие прогулки, хорошую музыку и людей, с которыми не скучно 💞 Ищу свою историю.",
+            tags: ["Кино", "Музыка", "Путешествия", "Книги"],
+            photos: [
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&q=80&w=600"
+            ]
+        };
+
+        let currentProfileIndex = 0;
+        let isPlaying = false;
+        let isAnimating = false;
+
+        // ===== ИЗБРАННОЕ =====
+        const favorites = [];
+        try {
+            const saved = localStorage.getItem('lovelink_favorites');
+            if (saved) {
+                const arr = JSON.parse(saved);
+                if (Array.isArray(arr)) favorites.push(...arr);
+            }
+        } catch (e) {}
+
+        function saveFavorites() {
+            try {
+                localStorage.setItem('lovelink_favorites', JSON.stringify(favorites));
+            } catch (e) {}
+        }
+
+        const audio = document.getElementById('audio-player');
+        const card = document.getElementById('card-container');
+        const actionButtonsRow = document.getElementById('action-buttons');
+        const starBtn = document.getElementById('star-btn');
+        const photoTrack = document.getElementById('photo-track');
+        const cardCounter = document.getElementById('card-counter');
+
+        let currentPhotoIndex = 0;
+        let currentPhotos = [];
+
+        let toastTimer = null;
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.innerText = text;
+            toast.classList.add('is-visible');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('is-visible');
+            }, 1800);
+        }
+
+        function updateStarButton() {
+            if (currentProfileIndex >= profiles.length) return;
+            const profile = profiles[currentProfileIndex];
+            if (favorites.includes(profile.id)) {
+                starBtn.classList.add('is-fav');
+            } else {
+                starBtn.classList.remove('is-fav');
+            }
+            starBtn.innerText = '⭐';
+        }
+
+        // ===== ГАЛЕРЕЯ КАРТОЧКИ =====
+        function renderPhotos(photos) {
+            currentPhotos = photos;
+            currentPhotoIndex = 0;
+            photoTrack.innerHTML = '';
+
+            photos.forEach((url, i) => {
+                const slide = document.createElement('div');
+                slide.className = 'photo-slide';
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Фото ' + (i + 1);
+                img.loading = i === 0 ? 'eager' : 'lazy';
+                slide.appendChild(img);
+                photoTrack.appendChild(slide);
+            });
+
+            updatePhotoPosition(false);
+        }
+
+        function updatePhotoPosition(animate) {
+            if (animate === false) {
+                photoTrack.style.transition = 'none';
+            } else {
+                photoTrack.style.transition = 'transform 0.3s ease';
+            }
+            photoTrack.style.transform = 'translateX(' + (-currentPhotoIndex * 100) + '%)';
+            cardCounter.innerText = (currentPhotoIndex + 1) + '/' + currentPhotos.length;
+        }
+
+        function nextPhoto(evt) {
+            if (evt) evt.stopPropagation();
+            if (currentPhotoIndex >= currentPhotos.length - 1) return;
+            currentPhotoIndex++;
+            updatePhotoPosition(true);
+        }
+
+        function prevPhoto(evt) {
+            if (evt) evt.stopPropagation();
+            if (currentPhotoIndex <= 0) return;
+            currentPhotoIndex--;
+            updatePhotoPosition(true);
+        }
+
+        (function setupPhotoSwipe() {
+            const holder = document.getElementById('card-image-holder');
+            let startX = 0;
+            let startY = 0;
+            let isDragging = false;
+            let isHorizontal = null;
+            let deltaX = 0;
+
+            function onDown(e) {
+                if (isAnimating) return;
+                if (e.target.closest('.photo-arrow')) return;
+
+                const point = e.touches ? e.touches[0] : e;
+                startX = point.clientX;
+                startY = point.clientY;
+                deltaX = 0;
+                isDragging = true;
+                isHorizontal = null;
+
+                photoTrack.style.transition = 'none';
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                const point = e.touches ? e.touches[0] : e;
+                const dx = point.clientX - startX;
+                const dy = point.clientY - startY;
+
+                if (isHorizontal === null) {
+                    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+                        isHorizontal = Math.abs(dx) > Math.abs(dy);
+                    } else {
+                        return;
+                    }
+                }
+                if (!isHorizontal) return;
+
+                if (e.cancelable) e.preventDefault();
+                deltaX = dx;
+                const base = -currentPhotoIndex * 100;
+                const offsetPercent = (dx / holder.offsetWidth) * 100;
+                photoTrack.style.transform = 'translateX(' + (base + offsetPercent) + '%)';
+            }
+
+            function onUp() {
+                if (!isDragging) return;
+                isDragging = false;
+
+                const threshold = holder.offsetWidth * 0.15;
+                const wasHorizontal = isHorizontal;
+
+                photoTrack.style.transition = 'transform 0.3s ease';
+
+                if (wasHorizontal) {
+                    if (deltaX < -threshold) {
+                        if (currentPhotoIndex < currentPhotos.length - 1) currentPhotoIndex++;
+                    } else if (deltaX > threshold) {
+                        if (currentPhotoIndex > 0) currentPhotoIndex--;
+                    }
+                }
+                updatePhotoPosition(true);
+            }
+
+            holder.addEventListener('touchstart', onDown, { passive: true });
+            holder.addEventListener('touchmove', onMove, { passive: false });
+            holder.addEventListener('touchend', onUp);
+            holder.addEventListener('touchcancel', onUp);
+
+            holder.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                onDown(e);
+            });
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+        })();
+
+        // ===== РЕНДЕР АНКЕТЫ =====
+        function renderProfile(index) {
+            if (index >= profiles.length) {
+                audio.pause();
+                isPlaying = false;
+                card.style.display = 'none';
+                actionButtonsRow.style.display = 'none';
+
+                let endMsg = document.getElementById('end-message');
+                if (!endMsg) {
+                    endMsg = document.createElement('div');
+                    endMsg.id = 'end-message';
+                    endMsg.style.cssText = 'padding: 40px; text-align: center; color: #8e8e93; max-width: 380px;';
+                    endMsg.innerHTML = '<h2 style="color:#ffffff;margin-bottom:12px;">Анкеты закончились! 😭</h2><p>Приходите позже или измените фильтры поиска.</p>';
+                    document.getElementById('screen-cards').appendChild(endMsg);
+                }
+                return;
+            }
+
+            card.style.display = '';
+            actionButtonsRow.style.display = '';
+
+            const profile = profiles[index];
+
+            renderPhotos(profile.photos);
+
+            document.getElementById('card-title').innerText = profile.name + ", " + profile.age;
+            document.getElementById('card-geo').innerText = "📍 " + profile.geo;
+            document.getElementById('card-bio').innerText = profile.bio;
+
+            const tagsContainer = document.getElementById('card-tags');
+            tagsContainer.innerHTML = '';
+            profile.tags.forEach(tag => {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'card-tag-item';
+                tagDiv.innerText = tag;
+                tagsContainer.appendChild(tagDiv);
+            });
+
+            document.getElementById('music-name').innerText = profile.track;
+            document.getElementById('music-artist').innerText = profile.artist;
+
+            audio.src = profile.audioUrl;
+            isPlaying = false;
+            document.querySelector('.music-btn-play').innerText = "▶️";
+            document.getElementById('music-progress').style.width = "0%";
+            document.getElementById('music-current-time').innerText = "0:00";
+
+            card.classList.remove('swipe-left', 'swipe-right', 'fade-in', 'star-pulse');
+            void card.offsetWidth;
+            card.classList.add('fade-in');
+            setTimeout(() => {
+                card.classList.remove('fade-in');
+            }, 320);
+
+            updateStarButton();
+        }
+
+        // ===== ДЕЙСТВИЯ =====
+        function clickAction(actionType) {
+            if (isAnimating) return;
+            if (currentProfileIndex >= profiles.length) return;
+
+            const profile = profiles[currentProfileIndex];
+            if (!profile) return;
+
+            if (actionType === 'star') {
+                try {
+                    if (favorites.includes(profile.id)) {
+                        const idx = favorites.indexOf(profile.id);
+                        favorites.splice(idx, 1);
+                        saveFavorites();
+                        updateStarButton();
+                        showToast('Удалено из избранного');
+                    } else {
+                        favorites.push(profile.id);
+                        saveFavorites();
+                        updateStarButton();
+                        showToast('⭐ ' + profile.name + ' в избранном');
+                    }
+                    card.classList.remove('star-pulse');
+                    void card.offsetWidth;
+                    card.classList.add('star-pulse');
+                    setTimeout(() => card.classList.remove('star-pulse'), 500);
+                } catch (e) {
+                    console.error('Ошибка в star-логике:', e);
+                }
+                return;
+            }
+
+            isAnimating = true;
+
+            const safetyTimer = setTimeout(() => {
+                if (isAnimating) isAnimating = false;
+            }, 1500);
+
+            try {
+                audio.pause();
+                isPlaying = false;
+
+                card.classList.remove('fade-in', 'swipe-left', 'swipe-right', 'star-pulse');
+                void card.offsetWidth;
+
+                if (actionType === 'dislike') {
+                    card.classList.add('swipe-left');
+                } else {
+                    card.classList.add('swipe-right');
+                }
+
+                setTimeout(() => {
+                    try {
+                        card.classList.remove('swipe-left', 'swipe-right');
+                        currentProfileIndex++;
+                        renderProfile(currentProfileIndex);
+
+                        if (actionType === 'like' &&
+                            window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showPopup) {
+                            try {
+                                window.Telegram.WebApp.showPopup({
+                                    title: 'Это Мэтч! 🎉',
+                                    message: 'Ваши музыкальные вкусы с ' + profile.name + ' совпали!',
+                                    buttons: [
+                                        { id: 'chat', type: 'default', text: 'Написать' },
+                                        { id: 'later', type: 'cancel', text: 'Позже' }
+                                    ]
+                                }, function(buttonId) {
+                                    if (buttonId === 'chat' && window.Telegram.WebApp.sendData) {
+                                        try {
+                                            window.Telegram.WebApp.sendData(JSON.stringify({
+                                                action: 'open_chat',
+                                                with: profile.name
+                                            }));
+                                        } catch (e) {}
+                                    }
+                                });
+                            } catch (e) {
+                                console.error('Ошибка showPopup:', e);
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Ошибка в основном setTimeout:', e);
+                    } finally {
+                        clearTimeout(safetyTimer);
+                        isAnimating = false;
+                    }
+                }, 400);
+            } catch (e) {
+                console.error('Ошибка в clickAction:', e);
+                clearTimeout(safetyTimer);
+                isAnimating = false;
+            }
+        }
+
+        function togglePlay() {
+            if (currentProfileIndex >= profiles.length) return;
+
+            const playBtn = document.querySelector('.music-btn-play');
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerText = "▶️";
+            } else {
+                audio.play().catch(e => console.log("Ошибка воспроизведения звука: ", e));
+                playBtn.innerText = "⏸";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        audio.ontimeupdate = function() {
+            if (audio.duration && !isNaN(audio.duration)) {
+                const percentage = (audio.currentTime / audio.duration) * 100;
+                document.getElementById('music-progress').style.width = percentage + "%";
+
+                const cm = Math.floor(audio.currentTime / 60);
+                const cs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+                document.getElementById('music-current-time').innerText = cm + ":" + cs;
+
+                const tm = Math.floor(audio.duration / 60);
+                const ts = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+                document.getElementById('music-total-time').innerText = tm + ":" + ts;
+            }
+        };
+
+        audio.onended = function() {
+            isPlaying = false;
+            const playBtn = document.querySelector('.music-btn-play');
+            if (playBtn) playBtn.innerText = "▶️";
+            document.getElementById('music-progress').style.width = "0%";
+            document.getElementById('music-current-time').innerText = "0:00";
+        };
+
+        // ===== ЭКРАН ПРОФИЛЯ =====
+        function renderMyProfile() {
+            // Обложка и основное
+            document.getElementById('profile-cover-img').src = myProfile.photos[0];
+            document.getElementById('my-name').innerText = myProfile.name + ", " + myProfile.age;
+            document.getElementById('my-geo').innerText = "📍 " + myProfile.geo;
+
+            // Мои фото
+            const grid = document.getElementById('my-photos-grid');
+            grid.innerHTML = '';
+            myProfile.photos.forEach(url => {
+                const cell = document.createElement('div');
+                cell.className = 'my-photo';
+                cell.onclick = function() { openPhotoViewer(url); };
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Моё фото';
+                cell.appendChild(img);
+                grid.appendChild(cell);
+            });
+
+            // Статистика (лайки можно привязать к избранному)
+            document.getElementById('stat-likes').innerText = '128';
+            document.getElementById('stat-matches').innerText = '14';
+            document.getElementById('stat-views').innerText = '1.2k';
+
+            // Избранное
+            renderFavoritesList();
+        }
+
+        function renderFavoritesList() {
+            const list = document.getElementById('fav-list');
+            list.innerHTML = '';
+
+            if (favorites.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'fav-empty';
+                empty.innerText = 'Пока никого нет. Нажимайте ⭐ на анкетах, чтобы добавить сюда.';
+                list.appendChild(empty);
+                return;
+            }
+
+            favorites.forEach(favId => {
+                const profile = profiles.find(p => p.id === favId);
+                if (!profile) return;
+
+                const item = document.createElement('div');
+                item.className = 'fav-item';
+
+                const img = document.createElement('img');
+                img.src = profile.photos[0];
+                img.alt = profile.name;
+
+                const info = document.createElement('div');
+                info.className = 'fav-item-info';
+                const nameEl = document.createElement('div');
+                nameEl.className = 'fav-item-name';
+                nameEl.innerText = profile.name + ", " + profile.age;
+                const subEl = document.createElement('div');
+                subEl.className = 'fav-item-sub';
+                subEl.innerText = '📍 ' + profile.geo;
+                info.appendChild(nameEl);
+                info.appendChild(subEl);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'fav-item-remove';
+                removeBtn.innerText = '✕';
+                removeBtn.onclick = function() {
+                    const idx = favorites.indexOf(favId);
+                    if (idx !== -1) favorites.splice(idx, 1);
+                    saveFavorites();
+                    renderFavoritesList();
+                    if (currentProfileIndex < profiles.length &&
+                        profiles[currentProfileIndex].id === favId) {
+                        updateStarButton();
+                    }
+                    showToast('Удалено из избранного');
+                };
+
+                item.appendChild(img);
+                item.appendChild(info);
+                item.appendChild(removeBtn);
+                list.appendChild(item);
+            });
+        }
+
+        // Модалка просмотра фото
+        function openPhotoViewer(url) {
+            document.getElementById('photo-viewer-img').src = url;
+            document.getElementById('photo-viewer').classList.add('is-open');
+        }
+        function closePhotoViewer(evt) {
+            if (evt) evt.stopPropagation();
+            document.getElementById('photo-viewer').classList.remove('is-open');
+        }
+
+        // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
+        function changeTab(tabId, evt) {
+            // Снимаем активность со всех кнопок навигации
+            document.querySelectorAll('.nav-button-item').forEach(function(btn) {
+                btn.classList.remove('is-active');
+            });
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('is-active');
+            }
+
+            // Прячем все экраны
+            document.querySelectorAll('.screen').forEach(function(s) {
+                s.classList.remove('is-active');
+            });
+
+            // Показываем нужный
+            if (tabId === 'cards') {
+                document.getElementById('screen-cards').classList.add('is-active');
+            } else if (tabId === 'profile') {
+                document.getElementById('screen-profile').classList.add('is-active');
+                renderMyProfile();
+            } else if (tabId === 'chats') {
+                showToast('Чаты скоро 😉');
+                // Возвращаем активной «Анкеты», чтобы не пустовал экран
+                document.querySelectorAll('.nav-button-item').forEach(b => b.classList.remove('is-active'));
+                document.getElementById('nav-cards').classList.add('is-active');
+                document.getElementById('screen-cards').classList.add('is-active');
+            } else if (tabId === 'top') {
+                showToast('Топ-100 скоро 😉');
+                document.querySelectorAll('.nav-button-item').forEach(b => b.classList.remove('is-active'));
+                document.getElementById('nav-cards').classList.add('is-active');
+                document.getElementById('screen-cards').classList.add('is-active');
+            }
+        }
+
+        // ===== СТАРТ =====
+        renderProfile(currentProfileIndex);
+    </script>
+</body>
+</html>
