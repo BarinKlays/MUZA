@@ -39,7 +39,6 @@
             margin: 2px 0 0 0;
         }
 
-        /* ===== ЭКРАНЫ ===== */
         .screen {
             width: 100%;
             max-width: 380px;
@@ -47,9 +46,7 @@
             flex-direction: column;
             align-items: center;
         }
-        .screen.is-active {
-            display: flex;
-        }
+        .screen.is-active { display: flex; }
 
         .user-top-bar {
             width: 100%;
@@ -129,20 +126,10 @@
             transition: transform 0.4s ease, opacity 0.4s ease;
         }
 
-        .swipe-left {
-            transform: translateX(-150px) rotate(-15deg);
-            opacity: 0;
-        }
-        .swipe-right {
-            transform: translateX(150px) rotate(15deg);
-            opacity: 0;
-        }
-        .fade-in {
-            animation: fadeInCard 0.3s ease forwards;
-        }
-        .star-pulse {
-            animation: starPulse 0.5s ease;
-        }
+        .swipe-left { transform: translateX(-150px) rotate(-15deg); opacity: 0; }
+        .swipe-right { transform: translateX(150px) rotate(15deg); opacity: 0; }
+        .fade-in { animation: fadeInCard 0.3s ease forwards; }
+        .star-pulse { animation: starPulse 0.5s ease; }
         @keyframes starPulse {
             0%   { transform: scale(1);    box-shadow: 0 0 0 rgba(100,210,255,0); }
             40%  { transform: scale(1.03); box-shadow: 0 0 30px rgba(100,210,255,0.6); }
@@ -231,22 +218,9 @@
         }
 
         .card-details { padding: 16px; }
-        .card-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0 0 4px 0;
-        }
-        .card-geo {
-            font-size: 13px;
-            color: #ff2d55;
-            margin: 0 0 12px 0;
-        }
-        .card-tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
+        .card-title { font-size: 20px; font-weight: bold; margin: 0 0 4px 0; }
+        .card-geo { font-size: 13px; color: #ff2d55; margin: 0 0 12px 0; }
+        .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
         .card-tag-item {
             background: #1f1f2e;
             padding: 5px 12px;
@@ -262,18 +236,14 @@
             margin: 0 0 16px 0;
         }
 
+        /* ===== ПЛЕЕР ===== */
         .music-box {
             background: #161622;
             border-radius: 16px;
             padding: 12px;
             border: 1px solid #242435;
         }
-        .music-top {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
+        .music-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .music-cover {
             width: 40px;
             height: 40px;
@@ -283,32 +253,51 @@
             align-items: center;
             justify-content: center;
             font-size: 16px;
+            flex-shrink: 0;
         }
-        .music-info { flex-grow: 1; }
-        .music-name { font-size: 13px; font-weight: bold; margin: 0; }
-        .music-artist { font-size: 11px; color: #8e8e93; margin: 2px 0 0 0; }
-        .music-buttons {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .music-info { flex-grow: 1; min-width: 0; }
+        .music-name {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .music-btn {
+        .music-artist {
+            font-size: 11px;
+            color: #8e8e93;
+            margin: 2px 0 0 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .music-buttons { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .player-btn {
             background: none;
             border: none;
             color: #ffffff;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .music-btn-play {
             width: 28px;
             height: 28px;
-            background: #ff2d55;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            cursor: pointer;
+            padding: 0;
+            transition: background 0.15s ease, transform 0.1s ease;
+            -webkit-tap-highlight-color: transparent;
         }
+        .player-btn:active { transform: scale(0.9); }
+        .player-btn:hover { background: rgba(255,255,255,0.06); }
+        .player-btn svg { width: 16px; height: 16px; display: block; fill: currentColor; }
+        .player-btn-main { width: 34px; height: 34px; background: #ff2d55; color: #ffffff; }
+        .player-btn-main:hover { background: #ff476f; }
+        .player-btn-main svg { width: 16px; height: 16px; }
+        .player-btn-heart { color: #8e8e93; }
+        .player-btn-heart.is-liked { color: #ff2d55; }
+        .player-btn-heart.is-liked svg { fill: #ff2d55; }
+
         .music-timeline {
             display: flex;
             align-items: center;
@@ -323,12 +312,14 @@
             background: #2c2c3e;
             border-radius: 2px;
             margin: 0 8px;
+            overflow: hidden;
         }
         .music-line-fill {
             width: 0%;
             height: 100%;
             background: #ff2d55;
             border-radius: 2px;
+            transition: width 0.1s linear;
         }
 
         .action-buttons-row {
@@ -391,9 +382,28 @@
             font-size: 10px;
             gap: 4px;
             width: 60px;
+            position: relative;
         }
         .nav-button-item.is-active { color: #ff2d55; }
         .nav-button-icon { font-size: 20px; }
+        .nav-badge {
+            position: absolute;
+            top: -2px;
+            right: 10px;
+            background: #ff2d55;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-sizing: border-box;
+        }
+        .nav-badge.is-visible { display: flex; }
 
         .toast {
             position: fixed;
@@ -420,9 +430,7 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ============================================ */
-        /* ============ ЭКРАН ПРОФИЛЯ ================= */
-        /* ============================================ */
+        /* ===== ПРОФИЛЬ ===== */
         .profile-cover {
             position: relative;
             width: 100%;
@@ -432,11 +440,7 @@
             background: #1c1c24;
             border: 1px solid #1f1f2e;
         }
-        .profile-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .profile-cover img { width: 100%; height: 100%; object-fit: cover; }
         .profile-cover::after {
             content: "";
             position: absolute;
@@ -453,16 +457,8 @@
             justify-content: space-between;
             align-items: flex-end;
         }
-        .profile-name-block h2 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 800;
-        }
-        .profile-name-block p {
-            margin: 2px 0 0 0;
-            font-size: 12px;
-            color: #d1d1d6;
-        }
+        .profile-name-block h2 { margin: 0; font-size: 22px; font-weight: 800; }
+        .profile-name-block p { margin: 2px 0 0 0; font-size: 12px; color: #d1d1d6; }
         .edit-btn {
             background: rgba(255,255,255,0.12);
             border: 1px solid rgba(255,255,255,0.2);
@@ -493,18 +489,8 @@
             font-weight: 700;
         }
 
-        /* Рейтинг в профиле */
-        .profile-rating-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .profile-rating-num {
-            font-size: 32px;
-            font-weight: 800;
-            color: #ff2d55;
-            line-height: 1;
-        }
+        .profile-rating-row { display: flex; align-items: center; gap: 12px; }
+        .profile-rating-num { font-size: 32px; font-weight: 800; color: #ff2d55; line-height: 1; }
         .profile-rating-bar-wrap { flex-grow: 1; }
         .profile-rating-bar-bg {
             width: 100%;
@@ -518,18 +504,9 @@
             height: 100%;
             background: linear-gradient(90deg, #ff2d55, #ff5e7e);
         }
-        .profile-rating-caption {
-            font-size: 11px;
-            color: #8e8e93;
-            margin-top: 6px;
-        }
+        .profile-rating-caption { font-size: 11px; color: #8e8e93; margin-top: 6px; }
 
-        /* Статистика */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .stat-cell {
             background: #161622;
             border: 1px solid #242435;
@@ -537,10 +514,7 @@
             padding: 12px 8px;
             text-align: center;
         }
-        .stat-cell .stat-value {
-            font-size: 18px;
-            font-weight: 800;
-        }
+        .stat-cell .stat-value { font-size: 18px; font-weight: 800; }
         .stat-cell .stat-label {
             font-size: 10px;
             color: #8e8e93;
@@ -549,20 +523,9 @@
             letter-spacing: 0.4px;
         }
 
-        /* О себе */
-        .profile-bio {
-            font-size: 13px;
-            color: #d1d1d6;
-            line-height: 1.5;
-            margin: 0 0 10px 0;
-        }
+        .profile-bio { font-size: 13px; color: #d1d1d6; line-height: 1.5; margin: 0 0 10px 0; }
 
-        /* Мои фото */
-        .my-photos-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-        }
+        .my-photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .my-photo {
             position: relative;
             width: 100%;
@@ -572,26 +535,11 @@
             background: #1c1c24;
             cursor: pointer;
         }
-        .my-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.2s ease;
-        }
+        .my-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s ease; }
         .my-photo:active img { transform: scale(0.96); }
 
-        /* Избранное в профиле */
-        .fav-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .fav-empty {
-            font-size: 12px;
-            color: #8e8e93;
-            text-align: center;
-            padding: 12px 0;
-        }
+        .fav-list { display: flex; flex-direction: column; gap: 8px; }
+        .fav-empty { font-size: 12px; color: #8e8e93; text-align: center; padding: 12px 0; }
         .fav-item {
             display: flex;
             align-items: center;
@@ -601,13 +549,7 @@
             border-radius: 14px;
             padding: 8px;
         }
-        .fav-item img {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
+        .fav-item img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
         .fav-item-info { flex-grow: 1; min-width: 0; }
         .fav-item-name {
             font-size: 13px;
@@ -634,11 +576,7 @@
         }
         .fav-item-remove:active { background: rgba(255,45,85,0.12); }
 
-        /* Настройки */
-        .settings-list {
-            display: flex;
-            flex-direction: column;
-        }
+        .settings-list { display: flex; flex-direction: column; }
         .settings-row {
             display: flex;
             align-items: center;
@@ -649,22 +587,10 @@
             cursor: pointer;
         }
         .settings-row:last-child { border-bottom: none; }
-        .settings-row .settings-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .settings-row .settings-icon {
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-        }
-        .settings-row .settings-chev {
-            color: #636366;
-            font-size: 14px;
-        }
+        .settings-row .settings-left { display: flex; align-items: center; gap: 10px; }
+        .settings-row .settings-icon { font-size: 16px; width: 20px; text-align: center; }
+        .settings-row .settings-chev { color: #636366; font-size: 14px; }
 
-        /* Модалка просмотра фото */
         .photo-viewer {
             position: fixed;
             inset: 0;
@@ -677,12 +603,7 @@
             box-sizing: border-box;
         }
         .photo-viewer.is-open { display: flex; }
-        .photo-viewer img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 14px;
-            object-fit: contain;
-        }
+        .photo-viewer img { max-width: 100%; max-height: 100%; border-radius: 14px; object-fit: contain; }
         .photo-viewer-close {
             position: absolute;
             top: 16px;
@@ -697,7 +618,6 @@
             cursor: pointer;
         }
 
-        /* Заголовок экрана профиля */
         .profile-heading {
             width: 100%;
             display: flex;
@@ -705,11 +625,7 @@
             align-items: center;
             margin-bottom: 10px;
         }
-        .profile-heading h2 {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 800;
-        }
+        .profile-heading h2 { margin: 0; font-size: 18px; font-weight: 800; }
         .profile-heading .settings-gear {
             background: #161622;
             border: 1px solid #242435;
@@ -720,6 +636,624 @@
             font-size: 16px;
             cursor: pointer;
         }
+
+        /* ============================================ */
+        /* ============ ЭКРАН ЧАТОВ =================== */
+        /* ============================================ */
+        .chats-heading {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .chats-heading h2 { margin: 0; font-size: 18px; font-weight: 800; }
+
+        .chats-search {
+            width: 100%;
+            background: #12121a;
+            border: 1px solid #1f1f2e;
+            border-radius: 14px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 13px;
+            box-sizing: border-box;
+            outline: none;
+            margin-bottom: 12px;
+        }
+        .chats-search::placeholder { color: #636366; }
+        .chats-search:focus { border-color: #ff2d55; }
+
+        .chats-list { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+        .chats-empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: #8e8e93;
+            font-size: 13px;
+        }
+        .chats-empty-icon { font-size: 40px; margin-bottom: 10px; }
+
+        .chat-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 16px;
+            background: #12121a;
+            border: 1px solid #1f1f2e;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .chat-row:hover { background: #161622; }
+        .chat-row:active { background: #1a1a24; }
+
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+            background: #242430;
+        }
+        .chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .chat-online-dot {
+            position: absolute;
+            right: 1px;
+            bottom: 1px;
+            width: 11px;
+            height: 11px;
+            background: #34c759;
+            border-radius: 50%;
+            border: 2px solid #12121a;
+        }
+
+        .chat-info { flex-grow: 1; min-width: 0; }
+        .chat-top-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .chat-name {
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-time { font-size: 10px; color: #636366; flex-shrink: 0; }
+        .chat-bottom-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+        .chat-preview {
+            font-size: 12px;
+            color: #8e8e93;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+        .chat-preview.is-unread { color: #ffffff; font-weight: 600; }
+        .chat-unread-badge {
+            background: #ff2d55;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        /* ===== ДИАЛОГ ===== */
+        .dialog-screen {
+            position: fixed;
+            inset: 0;
+            background: #0b0b0e;
+            z-index: 300;
+            display: none;
+            flex-direction: column;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .dialog-screen.is-open { display: flex; }
+
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            padding-top: calc(12px + env(safe-area-inset-top, 0px));
+            background: #12121a;
+            border-bottom: 1px solid #1f1f2e;
+            flex-shrink: 0;
+        }
+        .dialog-back {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 22px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            padding: 0;
+        }
+        .dialog-back:hover { background: rgba(255,255,255,0.08); }
+        .dialog-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #242430;
+        }
+        .dialog-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .dialog-header-info { flex-grow: 1; min-width: 0; }
+        .dialog-header-name {
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .dialog-header-status { font-size: 11px; color: #34c759; }
+
+        .dialog-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            scroll-behavior: smooth;
+        }
+        .dialog-empty {
+            text-align: center;
+            color: #8e8e93;
+            font-size: 12px;
+            padding: 30px 20px;
+        }
+        .dialog-empty-icon { font-size: 40px; margin-bottom: 10px; display: block; }
+
+        .msg-row { display: flex; flex-direction: column; max-width: 78%; }
+        .msg-row.out { align-self: flex-end; align-items: flex-end; }
+        .msg-row.in  { align-self: flex-start; align-items: flex-start; }
+
+        .msg-bubble {
+            padding: 9px 13px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .msg-row.out .msg-bubble {
+            background: linear-gradient(135deg, #ff2d55, #ff5e7e);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+        .msg-row.in .msg-bubble {
+            background: #1f1f2e;
+            color: #ffffff;
+            border: 1px solid #2c2c3e;
+            border-bottom-left-radius: 4px;
+        }
+        .msg-time { font-size: 10px; color: #636366; margin-top: 3px; padding: 0 4px; }
+
+        .dialog-input-bar {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding: 10px 12px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+            background: #12121a;
+            border-top: 1px solid #1f1f2e;
+            flex-shrink: 0;
+        }
+        .dialog-input {
+            flex-grow: 1;
+            background: #1f1f2e;
+            border: 1px solid #2c2c3e;
+            border-radius: 20px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 13px;
+            font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            min-height: 40px;
+            height: 40px;
+            line-height: 20px;
+            outline: none;
+            box-sizing: border-box;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .dialog-input::-webkit-scrollbar { display: none; width: 0; height: 0; }
+        .dialog-input:focus { border-color: #ff2d55; }
+        .dialog-send {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff2d55;
+            border: none;
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.1s ease, background 0.15s ease;
+        }
+        .dialog-send:active { transform: scale(0.92); }
+        .dialog-send:disabled { background: #2c2c3e; color: #636366; cursor: not-allowed; }
+        .dialog-send svg { width: 18px; height: 18px; fill: currentColor; display: block; }
+
+        /* ============================================ */
+        /* ============ ЭКРАН ТОП-100 ================= */
+        /* ============================================ */
+        .top-heading {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .top-heading h2 { margin: 0; font-size: 18px; font-weight: 800; }
+        .top-heading .top-crown { font-size: 18px; }
+
+        .top-period-switch {
+            display: flex;
+            width: 100%;
+            background: #12121a;
+            border: 1px solid #1f1f2e;
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+        .top-period-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #8e8e93;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 4px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .top-period-btn.is-active {
+            background: #ff2d55;
+            color: #ffffff;
+        }
+
+        .top-search {
+            width: 100%;
+            background: #12121a;
+            border: 1px solid #1f1f2e;
+            border-radius: 14px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 13px;
+            box-sizing: border-box;
+            outline: none;
+            margin-bottom: 12px;
+        }
+        .top-search::placeholder { color: #636366; }
+        .top-search:focus { border-color: #ff2d55; }
+
+        /* Подиум */
+        .top-podium {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr 1fr;
+            gap: 6px;
+            width: 100%;
+            margin-bottom: 14px;
+            align-items: end;
+        }
+        .podium-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #1c1c24;
+            border: 1px solid #242435;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        .podium-card:active { transform: scale(0.97); }
+        .podium-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .podium-card.first {
+            height: 190px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 24px rgba(255,215,0,0.25);
+        }
+        .podium-card.second {
+            height: 150px;
+            border: 1px solid #c0c0c0;
+        }
+        .podium-card.third {
+            height: 130px;
+            border: 1px solid #cd7f32;
+        }
+        .podium-medal {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            font-size: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            z-index: 2;
+        }
+        .podium-overlay {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 6px 8px;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%);
+            z-index: 2;
+        }
+        .podium-name {
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .podium-rating {
+            font-size: 11px;
+            color: #ffd700;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-top: 1px;
+        }
+        .podium-rank-num {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(0,0,0,0.65);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 7px;
+            border-radius: 8px;
+            z-index: 2;
+        }
+
+        /* Список топ-100 */
+        .top-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .top-list-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #8e8e93;
+            font-size: 13px;
+        }
+        .top-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 14px;
+            background: #12121a;
+            border: 1px solid #1f1f2e;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .top-row:hover { background: #161622; }
+        .top-row:active { background: #1a1a24; }
+
+        .top-rank {
+            width: 26px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #8e8e93;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .top-row .top-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #242430;
+        }
+        .top-row .top-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .top-row-info { flex-grow: 1; min-width: 0; }
+        .top-row-name {
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .top-row-sub {
+            font-size: 11px;
+            color: #8e8e93;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .top-row-rating {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #ff2d55;
+            flex-shrink: 0;
+        }
+        .top-row-rating .heart {
+            font-size: 10px;
+        }
+        .top-row-like-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #1f1f2e;
+            border: 1px solid #2c2c3e;
+            color: #ff2d55;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.1s ease, background 0.15s ease;
+        }
+        .top-row-like-btn:active { transform: scale(0.88); }
+        .top-row-like-btn.is-liked {
+            background: #ff2d55;
+            color: #fff;
+        }
+        .top-row-like-btn.is-liked svg { fill: #fff; }
+        .top-row-like-btn svg { width: 14px; height: 14px; display: block; fill: currentColor; }
+
+        /* Модалка профиля из топа */
+        .top-profile-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 400;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px 14px;
+            padding-top: calc(20px + env(safe-area-inset-top, 0px));
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .top-profile-modal.is-open { display: flex; }
+        .top-profile-card {
+            background: #12121a;
+            border: 1px solid #1f1f2e;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 380px;
+            overflow: hidden;
+            position: relative;
+            animation: fadeInCard 0.25s ease;
+        }
+        .top-profile-photo {
+            width: 100%;
+            height: 300px;
+            background: #1c1c24;
+            overflow: hidden;
+            position: relative;
+        }
+        .top-profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .top-profile-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 3;
+        }
+        .top-profile-rank-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.65);
+            color: #ffd700;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 10px;
+            z-index: 3;
+        }
+        .top-profile-body { padding: 16px; }
+        .top-profile-name {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 4px 0;
+        }
+        .top-profile-geo {
+            font-size: 13px;
+            color: #ff2d55;
+            margin: 0 0 10px 0;
+        }
+        .top-profile-rating-line {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 12px;
+        }
+        .top-profile-bio {
+            font-size: 13px;
+            color: #d1d1d6;
+            line-height: 1.4;
+            margin: 0 0 12px 0;
+        }
+        .top-profile-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .top-profile-action {
+            flex: 1;
+            padding: 11px;
+            border-radius: 14px;
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s ease, background 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .top-profile-action:active { transform: scale(0.97); }
+        .top-profile-action.like { background: #ff2d55; color: #fff; }
+        .top-profile-action.star { background: #1f1f2e; color: #64d2ff; border: 1px solid #2c2c3e; }
+        .top-profile-action.star.is-fav { background: rgba(100,210,255,0.15); }
+        .top-profile-action.chat { background: #1f1f2e; color: #fff; border: 1px solid #2c2c3e; }
+        .top-profile-action.chat:disabled { opacity: 0.4; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -741,7 +1275,6 @@
                     <span class="user-meta-status">Онлайн</span>
                 </div>
             </div>
-
             <div class="rating-box">
                 <span class="rating-heart">❤️</span>
                 <span class="rating-num">8.7</span>
@@ -764,9 +1297,7 @@
             <div class="card-details">
                 <h2 id="card-title" class="card-title">Загрузка...</h2>
                 <p id="card-geo" class="card-geo">📍 Загрузка...</p>
-
                 <div id="card-tags" class="card-tags"></div>
-
                 <p id="card-bio" class="card-bio-text"></p>
 
                 <div class="music-box">
@@ -777,10 +1308,16 @@
                             <p id="music-artist" class="music-artist">The Neighbourhood</p>
                         </div>
                         <div class="music-buttons">
-                            <button class="music-btn">⏮</button>
-                            <button class="music-btn music-btn-play" onclick="togglePlay()">▶️</button>
-                            <button class="music-btn">⏭</button>
-                            <button class="music-btn" style="color: #ff2d55;">❤️</button>
+                            <button class="player-btn" id="btn-rewind" onclick="seekBy(-10)" aria-label="Назад 10 секунд">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 6V3L4 8l7 5v-3c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H3c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                            </button>
+                            <button class="player-btn player-btn-main" id="btn-play" onclick="togglePlay()" aria-label="Play / Pause"></button>
+                            <button class="player-btn" id="btn-forward" onclick="seekBy(10)" aria-label="Вперёд 10 секунд">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 6V3l7 5-7 5v-3c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg>
+                            </button>
+                            <button class="player-btn player-btn-heart" id="btn-track-heart" onclick="toggleTrackLike()" aria-label="Лайк трека">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </button>
                         </div>
                     </div>
                     <div class="music-timeline">
@@ -788,7 +1325,7 @@
                         <div class="music-line-bg">
                             <div id="music-progress" class="music-line-fill"></div>
                         </div>
-                        <span id="music-total-time">0:30</span>
+                        <span id="music-total-time">0:00</span>
                     </div>
                 </div>
             </div>
@@ -801,14 +1338,39 @@
         </div>
     </div>
 
-    <!-- ================= ЭКРАН 2: ПРОФИЛЬ ================= -->
+    <!-- ================= ЭКРАН 2: ЧАТЫ ================= -->
+    <div id="screen-chats" class="screen">
+        <div class="chats-heading"><h2>Чаты</h2></div>
+        <input id="chats-search-input" class="chats-search" type="text" placeholder="Поиск по мэтчам..." oninput="filterChats()">
+        <div id="chats-list" class="chats-list"></div>
+    </div>
+
+    <!-- ================= ЭКРАН 3: ТОП-100 ================= -->
+    <div id="screen-top" class="screen">
+        <div class="top-heading">
+            <h2>Топ-100</h2>
+            <span class="top-crown">👑</span>
+        </div>
+
+        <div class="top-period-switch">
+            <button class="top-period-btn is-active" data-period="week" onclick="setTopPeriod('week', event)">За неделю</button>
+            <button class="top-period-btn" data-period="month" onclick="setTopPeriod('month', event)">За месяц</button>
+            <button class="top-period-btn" data-period="all" onclick="setTopPeriod('all', event)">За всё время</button>
+        </div>
+
+        <input id="top-search-input" class="top-search" type="text" placeholder="Поиск по имени..." oninput="renderTop()">
+
+        <div id="top-podium" class="top-podium"></div>
+        <div id="top-list" class="top-list"></div>
+    </div>
+
+    <!-- ================= ЭКРАН 4: ПРОФИЛЬ ================= -->
     <div id="screen-profile" class="screen">
         <div class="profile-heading">
             <h2>Мой профиль</h2>
             <button class="settings-gear" onclick="showToast('Настройки скоро 😉')">⚙️</button>
         </div>
 
-        <!-- Обложка с фото и именем -->
         <div class="profile-cover">
             <img id="profile-cover-img" src="" alt="Моё фото">
             <div class="profile-cover-info">
@@ -820,40 +1382,26 @@
             </div>
         </div>
 
-        <!-- Рейтинг -->
         <div class="profile-section">
             <p class="profile-section-title">Мой рейтинг</p>
             <div class="profile-rating-row">
                 <div class="profile-rating-num">8.7</div>
                 <div class="profile-rating-bar-wrap">
-                    <div class="profile-rating-bar-bg">
-                        <div class="profile-rating-bar-fill"></div>
-                    </div>
+                    <div class="profile-rating-bar-bg"><div class="profile-rating-bar-fill"></div></div>
                     <div class="profile-rating-caption">Топ 12% в вашем городе · 87 из 100</div>
                 </div>
             </div>
         </div>
 
-        <!-- Статистика -->
         <div class="profile-section">
             <p class="profile-section-title">Статистика</p>
             <div class="stats-grid">
-                <div class="stat-cell">
-                    <div class="stat-value" id="stat-likes">128</div>
-                    <div class="stat-label">Лайки</div>
-                </div>
-                <div class="stat-cell">
-                    <div class="stat-value" id="stat-matches">14</div>
-                    <div class="stat-label">Мэтчи</div>
-                </div>
-                <div class="stat-cell">
-                    <div class="stat-value" id="stat-views">1.2k</div>
-                    <div class="stat-label">Просмотры</div>
-                </div>
+                <div class="stat-cell"><div class="stat-value" id="stat-likes">128</div><div class="stat-label">Лайки</div></div>
+                <div class="stat-cell"><div class="stat-value" id="stat-matches">14</div><div class="stat-label">Мэтчи</div></div>
+                <div class="stat-cell"><div class="stat-value" id="stat-views">1.2k</div><div class="stat-label">Просмотры</div></div>
             </div>
         </div>
 
-        <!-- О себе -->
         <div class="profile-section">
             <p class="profile-section-title">О себе</p>
             <p class="profile-bio">Люблю долгие прогулки, хорошую музыку и людей, с которыми не скучно 💞 Ищу свою историю.</p>
@@ -865,19 +1413,16 @@
             </div>
         </div>
 
-        <!-- Мои фото -->
         <div class="profile-section">
             <p class="profile-section-title">Мои фото</p>
             <div id="my-photos-grid" class="my-photos-grid"></div>
         </div>
 
-        <!-- Избранное -->
         <div class="profile-section">
             <p class="profile-section-title">Избранное</p>
             <div id="fav-list" class="fav-list"></div>
         </div>
 
-        <!-- Настройки -->
         <div class="profile-section">
             <p class="profile-section-title">Настройки</p>
             <div class="settings-list">
@@ -897,29 +1442,67 @@
         </div>
     </div>
 
-    <!-- Нижний таб-бар -->
+    <!-- ================= ДИАЛОГ ================= -->
+    <div id="dialog-screen" class="dialog-screen">
+        <div class="dialog-header">
+            <button class="dialog-back" onclick="closeDialog()" aria-label="Назад">‹</button>
+            <div class="dialog-avatar"><img id="dialog-avatar-img" src="" alt=""></div>
+            <div class="dialog-header-info">
+                <div id="dialog-header-name" class="dialog-header-name">Имя</div>
+                <div id="dialog-header-status" class="dialog-header-status">Онлайн</div>
+            </div>
+        </div>
+        <div id="dialog-messages" class="dialog-messages"></div>
+        <div class="dialog-input-bar">
+            <textarea id="dialog-input" class="dialog-input" rows="1" placeholder="Сообщение..." oninput="onDialogInput()"></textarea>
+            <button id="dialog-send" class="dialog-send" onclick="sendMessage()" aria-label="Отправить" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= МОДАЛКА ПРОФИЛЯ ИЗ ТОПА ================= -->
+    <div id="top-profile-modal" class="top-profile-modal" onclick="closeTopProfile(event)">
+        <div class="top-profile-card" onclick="event.stopPropagation()">
+            <div class="top-profile-photo">
+                <button class="top-profile-close" onclick="closeTopProfile(event)">✕</button>
+                <span id="top-profile-rank-badge" class="top-profile-rank-badge">#1</span>
+                <img id="top-profile-photo-img" src="" alt="">
+            </div>
+            <div class="top-profile-body">
+                <h2 id="top-profile-name" class="top-profile-name"></h2>
+                <p id="top-profile-geo" class="top-profile-geo"></p>
+                <div id="top-profile-rating" class="top-profile-rating-line"></div>
+                <p id="top-profile-bio" class="top-profile-bio"></p>
+                <div id="top-profile-tags" class="card-tags"></div>
+                <div class="top-profile-actions">
+                    <button id="top-profile-like-btn" class="top-profile-action like" onclick="topProfileLike()">❤️ Лайк</button>
+                    <button id="top-profile-star-btn" class="top-profile-action star" onclick="topProfileStar()">⭐</button>
+                    <button id="top-profile-chat-btn" class="top-profile-action chat" onclick="topProfileChat()">💬</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="bottom-nav-bar">
         <button id="nav-cards" class="nav-button-item is-active" onclick="changeTab('cards', event)">
-            <span class="nav-button-icon">🎴</span>
-            <span>Анкеты</span>
+            <span class="nav-button-icon">🎴</span><span>Анкеты</span>
         </button>
         <button id="nav-chats" class="nav-button-item" onclick="changeTab('chats', event)">
             <span class="nav-button-icon">💬</span>
+            <span class="nav-badge" id="nav-chats-badge">0</span>
             <span>Чаты</span>
         </button>
         <button id="nav-top" class="nav-button-item" onclick="changeTab('top', event)">
-            <span class="nav-button-icon">🔥</span>
-            <span>Топ-100</span>
+            <span class="nav-button-icon">🔥</span><span>Топ-100</span>
         </button>
         <button id="nav-profile" class="nav-button-item" onclick="changeTab('profile', event)">
-            <span class="nav-button-icon">👤</span>
-            <span>Профиль</span>
+            <span class="nav-button-icon">👤</span><span>Профиль</span>
         </button>
     </div>
 
     <div id="toast" class="toast"></div>
 
-    <!-- Модалка просмотра фото -->
     <div id="photo-viewer" class="photo-viewer" onclick="closePhotoViewer(event)">
         <button class="photo-viewer-close" onclick="closePhotoViewer(event)">✕</button>
         <img id="photo-viewer-img" src="" alt="Просмотр">
@@ -933,8 +1516,12 @@
             window.Telegram.WebApp.expand();
         }
 
-        // ===== ДАННЫЕ =====
-        const profiles = [
+        const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+        const ICON_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+        const ICON_HEART_FILLED = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+
+        // ===== БАЗОВЫЕ АНКЕТЫ (3) =====
+        const baseProfiles = [
             {
                 id: 1,
                 name: "Алина",
@@ -991,7 +1578,384 @@
             }
         ];
 
-        // Мой профиль (текущий пользователь)
+        // ===== ГЕНЕРАЦИЯ 100 АНКЕТ =====
+        const MALE_NAMES = ["Максим","Александр","Дмитрий","Иван","Артём","Сергей","Никита","Андрей","Михаил","Егор","Кирилл","Роман","Даниил","Тимофей","Николай","Владимир","Павел","Олег","Денис","Антон"];
+        const FEMALE_NAMES = ["Алина","Екатерина","Мария","Анна","Ольга","Виктория","Наталья","Елена","Татьяна","Кристина","Полина","Юлия","София","Алиса","Дарья","Вероника","Евгения","Ксения","Маргарита","Валерия"];
+        const CITIES = ["Москва","Санкт-Петербург","Краснодар","Новосибирск","Екатеринбург","Казань","Нижний Новгород","Челябинск","Самара","Омск","Ростов-на-Дону","Уфа","Красноярск","Воронеж","Пермь"];
+        const TAGS_POOL = ["Кино","Музыка","Путешествия","Книги","Спорт","Танцы","Фотография","Йога","Кулинария","Рисование","Игры","Театр","Природа","Кофе","Животные","Мода","Дизайн","Языки","Психология","Астрономия","Горы","Море","Сноуборд","Бег","Гитара","Пианино","Фестивали","Концерты","Вино","Велосипед"];
+        const TRACKS = [
+            { t: "Sweater Weather", a: "The Neighbourhood", u: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { t: "Blinding Lights", a: "The Weeknd", u: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { t: "Starlight", a: "Muse", u: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+            { t: "Chandelier", a: "Sia", u: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+            { t: "Someone Like You", a: "Adele", u: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+            { t: "Believer", a: "Imagine Dragons", u: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" }
+        ];
+        const PHOTO_POOL = [
+            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=600",
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600"
+        ];
+
+        // Детерминированный псевдослучайный генератор (чтобы рейтинг не прыгал при перерисовке)
+        function seededRand(seed) {
+            let x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+
+        function generateProfile(i) {
+            const isMale = i % 2 === 0;
+            const names = isMale ? MALE_NAMES : FEMALE_NAMES;
+            const name = names[Math.floor(seededRand(i * 7 + 3) * names.length)];
+            const age = 19 + Math.floor(seededRand(i * 11 + 5) * 17);
+            const city = CITIES[Math.floor(seededRand(i * 13 + 9) * CITIES.length)];
+            const dist = (0.5 + seededRand(i * 17 + 2) * 40).toFixed(1);
+            const photos = [];
+            const photoCount = 3 + Math.floor(seededRand(i * 19 + 4) * 4);
+            for (let k = 0; k < photoCount; k++) {
+                photos.push(PHOTO_POOL[Math.floor(seededRand(i * 23 + k * 7 + 1) * PHOTO_POOL.length)]);
+            }
+            const tagCount = 3 + Math.floor(seededRand(i * 29 + 6) * 3);
+            const tags = [];
+            for (let k = 0; k < tagCount; k++) {
+                const tag = TAGS_POOL[Math.floor(seededRand(i * 31 + k * 5 + 8) * TAGS_POOL.length)];
+                if (!tags.includes(tag)) tags.push(tag);
+            }
+            const bios = [
+                "Ищу свою историю 💞",
+                "Люблю путешествия и кофе по утрам ☕",
+                "Давай поговорим о музыке 🎵",
+                "Спорт, книги и немного романтики ✨",
+                "Просто хочу найти близкого человека",
+                "Люблю закаты и долгие прогулки 🌅",
+                "Мечтаю о море и приключениях 🌊",
+                "Кино, вино и хорошая компания 🍷"
+            ];
+            const bio = bios[Math.floor(seededRand(i * 37 + 10) * bios.length)];
+            const track = TRACKS[Math.floor(seededRand(i * 41 + 12) * TRACKS.length)];
+            const ratingBase = 5.0 + seededRand(i * 43 + 14) * 4.9;
+
+            return {
+                id: 1000 + i,
+                name: name,
+                age: age,
+                geo: city + ", " + dist + " км",
+                photos: photos,
+                tags: tags,
+                bio: bio,
+                track: track.t,
+                artist: track.a,
+                audioUrl: track.u,
+                baseRating: ratingBase
+            };
+        }
+
+        const profiles = [...baseProfiles];
+        for (let i = 0; i < 97; i++) {
+            profiles.push(generateProfile(i));
+        }
+
+        // Рейтинг анкеты для текущего периода
+        let topPeriod = 'week';
+        function getRating(profile) {
+            let base = profile.baseRating != null ? profile.baseRating : 5.0;
+            // Базовые 3 анкеты получают фиксированный рейтинг
+            if (profile.id === 1) base = 9.4;
+            else if (profile.id === 2) base = 9.1;
+            else if (profile.id === 3) base = 8.9;
+
+            if (topPeriod === 'week') return (base + 0.3).toFixed(1);
+            if (topPeriod === 'month') return base.toFixed(1);
+            return (base - 0.2).toFixed(1);
+        }
+
+        function getTopList() {
+            return profiles
+                .map(p => ({ profile: p, rating: parseFloat(getRating(p)) }))
+                .sort((a, b) => b.rating - a.rating);
+        }
+
+        function setTopPeriod(period, evt) {
+            topPeriod = period;
+            document.querySelectorAll('.top-period-btn').forEach(btn => btn.classList.remove('is-active'));
+            if (evt && evt.currentTarget) evt.currentTarget.classList.add('is-active');
+            renderTop();
+        }
+
+        function renderTop() {
+            const searchEl = document.getElementById('top-search-input');
+            const query = (searchEl ? searchEl.value : '').trim().toLowerCase();
+
+            const fullList = getTopList();
+            let filtered = fullList;
+            if (query) {
+                filtered = fullList.filter(item => item.profile.name.toLowerCase().includes(query));
+            }
+
+            renderTopPodium(filtered);
+            renderTopList(filtered);
+        }
+
+        function renderTopPodium(filtered) {
+            const podiumEl = document.getElementById('top-podium');
+            podiumEl.innerHTML = '';
+
+            // Подиум только при отсутствии поиска
+            const searchEl = document.getElementById('top-search-input');
+            const hasQuery = searchEl && searchEl.value.trim().length > 0;
+            if (hasQuery) {
+                podiumEl.style.display = 'none';
+                return;
+            }
+            podiumEl.style.display = 'grid';
+
+            const top3 = filtered.slice(0, 3);
+            if (top3.length === 0) return;
+
+            // Порядок отображения: 2-е, 1-е, 3-е
+            const order = [top3[1], top3[0], top3[2]];
+            const classes = ['second', 'first', 'third'];
+            const medals = ['🥈', '🥇', '🥉'];
+            const ranks = [2, 1, 3];
+
+            order.forEach((item, idx) => {
+                if (!item) return;
+                const profile = item.profile;
+                const card = document.createElement('div');
+                card.className = 'podium-card ' + classes[idx];
+                card.onclick = function() { openTopProfile(profile.id); };
+
+                const img = document.createElement('img');
+                img.src = profile.photos[0];
+                img.alt = profile.name;
+
+                const medal = document.createElement('span');
+                medal.className = 'podium-medal';
+                medal.innerText = medals[idx];
+
+                const rankNum = document.createElement('span');
+                rankNum.className = 'podium-rank-num';
+                rankNum.innerText = '#' + ranks[idx];
+
+                const overlay = document.createElement('div');
+                overlay.className = 'podium-overlay';
+                const nameEl = document.createElement('div');
+                nameEl.className = 'podium-name';
+                nameEl.innerText = profile.name + ', ' + profile.age;
+                const ratingEl = document.createElement('div');
+                ratingEl.className = 'podium-rating';
+                ratingEl.innerHTML = '❤️ ' + item.rating.toFixed(1);
+                overlay.appendChild(nameEl);
+                overlay.appendChild(ratingEl);
+
+                card.appendChild(img);
+                card.appendChild(medal);
+                card.appendChild(rankNum);
+                card.appendChild(overlay);
+                podiumEl.appendChild(card);
+            });
+        }
+
+        function renderTopList(filtered) {
+            const listEl = document.getElementById('top-list');
+            listEl.innerHTML = '';
+
+            // Пропускаем первые 3 места (они на подиуме), если нет поиска
+            const searchEl = document.getElementById('top-search-input');
+            const hasQuery = searchEl && searchEl.value.trim().length > 0;
+            const startFrom = hasQuery ? 0 : 3;
+
+            if (filtered.length <= startFrom) {
+                if (filtered.length === 0) {
+                    const empty = document.createElement('div');
+                    empty.className = 'top-list-empty';
+                    empty.innerText = 'Ничего не найдено';
+                    listEl.appendChild(empty);
+                }
+                return;
+            }
+
+            for (let i = startFrom; i < filtered.length; i++) {
+                const item = filtered[i];
+                const profile = item.profile;
+                const rank = i + 1;
+
+                const row = document.createElement('div');
+                row.className = 'top-row';
+                row.onclick = function() { openTopProfile(profile.id); };
+
+                const rankEl = document.createElement('div');
+                rankEl.className = 'top-rank';
+                rankEl.innerText = rank;
+
+                const avatar = document.createElement('div');
+                avatar.className = 'top-avatar';
+                const avatarImg = document.createElement('img');
+                avatarImg.src = profile.photos[0];
+                avatarImg.alt = profile.name;
+                avatar.appendChild(avatarImg);
+
+                const info = document.createElement('div');
+                info.className = 'top-row-info';
+                const nameEl = document.createElement('div');
+                nameEl.className = 'top-row-name';
+                nameEl.innerText = profile.name + ', ' + profile.age;
+                const subEl = document.createElement('div');
+                subEl.className = 'top-row-sub';
+                subEl.innerText = '📍 ' + profile.geo;
+                info.appendChild(nameEl);
+                info.appendChild(subEl);
+
+                const ratingEl = document.createElement('div');
+                ratingEl.className = 'top-row-rating';
+                ratingEl.innerHTML = '<span class="heart">❤️</span>' + item.rating.toFixed(1);
+
+                const likeBtn = document.createElement('button');
+                likeBtn.className = 'top-row-like-btn';
+                const inChats = !!chats[profile.id];
+                if (inChats) likeBtn.classList.add('is-liked');
+                likeBtn.innerHTML = ICON_HEART_FILLED;
+                likeBtn.onclick = function(ev) {
+                    ev.stopPropagation();
+                    likeFromTop(profile.id);
+                };
+
+                row.appendChild(rankEl);
+                row.appendChild(avatar);
+                row.appendChild(info);
+                row.appendChild(ratingEl);
+                row.appendChild(likeBtn);
+                listEl.appendChild(row);
+            }
+        }
+
+        // ===== МОДАЛКА ПРОФИЛЯ ИЗ ТОПА =====
+        let activeTopProfileId = null;
+
+        function openTopProfile(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+            activeTopProfileId = profileId;
+
+            const fullList = getTopList();
+            const rank = fullList.findIndex(x => x.profile.id === profileId) + 1;
+            const rating = getRating(profile);
+
+            document.getElementById('top-profile-photo-img').src = profile.photos[0];
+            document.getElementById('top-profile-name').innerText = profile.name + ', ' + profile.age;
+            document.getElementById('top-profile-geo').innerText = '📍 ' + profile.geo;
+            document.getElementById('top-profile-rank-badge').innerText = '#' + rank;
+            document.getElementById('top-profile-rating').innerHTML = '❤️ Рейтинг: ' + parseFloat(rating).toFixed(1);
+            document.getElementById('top-profile-bio').innerText = profile.bio;
+
+            const tagsEl = document.getElementById('top-profile-tags');
+            tagsEl.innerHTML = '';
+            profile.tags.forEach(t => {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'card-tag-item';
+                tagDiv.innerText = t;
+                tagsEl.appendChild(tagDiv);
+            });
+
+            // Состояние кнопок
+            const starBtn = document.getElementById('top-profile-star-btn');
+            if (favorites.includes(profileId)) {
+                starBtn.classList.add('is-fav');
+            } else {
+                starBtn.classList.remove('is-fav');
+            }
+
+            const chatBtn = document.getElementById('top-profile-chat-btn');
+            if (chats[profileId]) {
+                chatBtn.disabled = false;
+                chatBtn.style.opacity = '1';
+            } else {
+                chatBtn.disabled = false; // можно написать даже без предварительного лайка
+                chatBtn.style.opacity = '1';
+            }
+
+            const likeBtn = document.getElementById('top-profile-like-btn');
+            if (chats[profileId]) {
+                likeBtn.innerText = '💬 Уже мэтч';
+            } else {
+                likeBtn.innerText = '❤️ Лайк';
+            }
+
+            document.getElementById('top-profile-modal').classList.add('is-open');
+        }
+
+        function closeTopProfile(evt) {
+            if (evt) evt.stopPropagation();
+            document.getElementById('top-profile-modal').classList.remove('is-open');
+            activeTopProfileId = null;
+        }
+
+        function topProfileLike() {
+            if (activeTopProfileId == null) return;
+            likeFromTop(activeTopProfileId);
+            // Обновляем состояние модалки
+            openTopProfile(activeTopProfileId);
+        }
+
+        function topProfileStar() {
+            if (activeTopProfileId == null) return;
+            const profile = profiles.find(p => p.id === activeTopProfileId);
+            if (!profile) return;
+
+            if (favorites.includes(profile.id)) {
+                favorites.splice(favorites.indexOf(profile.id), 1);
+                saveFavorites();
+                showToast('Удалено из избранного');
+            } else {
+                favorites.push(profile.id);
+                saveFavorites();
+                showToast('⭐ ' + profile.name + ' в избранном');
+            }
+            openTopProfile(activeTopProfileId);
+            renderTop();
+        }
+
+        function topProfileChat() {
+            if (activeTopProfileId == null) return;
+            ensureChat(activeTopProfileId);
+            saveChats();
+            updateChatsBadge();
+            closeTopProfile();
+            changeTabById('chats');
+            openDialog(activeTopProfileId);
+        }
+
+        function likeFromTop(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+
+            if (chats[profileId]) {
+                showToast('Вы уже совпали с ' + profile.name);
+                return;
+            }
+
+            ensureChat(profileId);
+            saveChats();
+            updateChatsBadge();
+            showToast('❤️ Мэтч с ' + profile.name);
+
+            renderTop();
+            if (activeTopProfileId === profileId) {
+                openTopProfile(profileId);
+            }
+        }
+
+        // ===== ОСТАЛЬНОЕ (анкеты, чаты, профиль, плеер) =====
         const myProfile = {
             name: "Алина",
             age: 23,
@@ -1009,10 +1973,8 @@
         };
 
         let currentProfileIndex = 0;
-        let isPlaying = false;
         let isAnimating = false;
 
-        // ===== ИЗБРАННОЕ =====
         const favorites = [];
         try {
             const saved = localStorage.getItem('lovelink_favorites');
@@ -1021,12 +1983,316 @@
                 if (Array.isArray(arr)) favorites.push(...arr);
             }
         } catch (e) {}
-
         function saveFavorites() {
-            try {
-                localStorage.setItem('lovelink_favorites', JSON.stringify(favorites));
-            } catch (e) {}
+            try { localStorage.setItem('lovelink_favorites', JSON.stringify(favorites)); } catch (e) {}
         }
+
+        const likedTracks = new Set();
+        try {
+            const savedTracks = localStorage.getItem('lovelink_liked_tracks');
+            if (savedTracks) {
+                const arr = JSON.parse(savedTracks);
+                if (Array.isArray(arr)) arr.forEach(id => likedTracks.add(id));
+            }
+        } catch (e) {}
+        function saveLikedTracks() {
+            try { localStorage.setItem('lovelink_liked_tracks', JSON.stringify([...likedTracks])); } catch (e) {}
+        }
+
+        const chats = {};
+        try {
+            const saved = localStorage.getItem('lovelink_chats');
+            if (saved) {
+                const obj = JSON.parse(saved);
+                if (obj && typeof obj === 'object') Object.assign(chats, obj);
+            }
+        } catch (e) {}
+        function saveChats() {
+            try { localStorage.setItem('lovelink_chats', JSON.stringify(chats)); } catch (e) {}
+        }
+
+        const autoReplies = [
+            "Привет! Рада, что мы совпали 😊",
+            "Как проходит день?",
+            "О, у нас похожие вкусы в музыке 🎵",
+            "Расскажи о себе что-нибудь интересное",
+            "Может, встретимся на выходных?",
+            "Ха-ха, забавно 😄",
+            "Я как раз слушаю тот самый трек",
+            "Кстати, ты был(а) на концерте этой группы?",
+            "Люблю такие места, надо сходить",
+            "Согласна на все 100%"
+        ];
+
+        function ensureChat(profileId) {
+            if (!chats[profileId]) chats[profileId] = { messages: [], unread: 0 };
+            return chats[profileId];
+        }
+
+        function formatTime(ts) {
+            const d = new Date(ts);
+            const now = new Date();
+            const hh = d.getHours().toString().padStart(2, '0');
+            const mm = d.getMinutes().toString().padStart(2, '0');
+            const sameDay = d.toDateString() === now.toDateString();
+            if (sameDay) return hh + ':' + mm;
+            const dd = d.getDate().toString().padStart(2, '0');
+            const mo = (d.getMonth() + 1).toString().padStart(2, '0');
+            return dd + '.' + mo;
+        }
+
+        function getProfileById(id) {
+            return profiles.find(p => p.id === id) || null;
+        }
+
+        function getChatsForList() {
+            const ids = Object.keys(chats).map(Number);
+            const withMessages = ids.filter(id => chats[id] && chats[id].messages.length > 0);
+            const empty = ids.filter(id => !chats[id] || chats[id].messages.length === 0);
+            withMessages.sort((a, b) => {
+                const la = chats[a].messages[chats[a].messages.length - 1].ts;
+                const lb = chats[b].messages[chats[b].messages.length - 1].ts;
+                return lb - la;
+            });
+            empty.sort((a, b) => a - b);
+            return [...withMessages, ...empty];
+        }
+
+        function renderChatsList() {
+            const listEl = document.getElementById('chats-list');
+            const searchEl = document.getElementById('chats-search-input');
+            const query = (searchEl.value || '').trim().toLowerCase();
+            listEl.innerHTML = '';
+
+            const ids = getChatsForList();
+            const filtered = ids.filter(id => {
+                const p = getProfileById(id);
+                if (!p) return false;
+                if (!query) return true;
+                return p.name.toLowerCase().includes(query);
+            });
+
+            if (filtered.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'chats-empty';
+                if (ids.length === 0) {
+                    empty.innerHTML = '<div class="chats-empty-icon">💬</div>' +
+                        '<div style="color:#fff;font-weight:700;margin-bottom:6px;">Пока нет мэтчей</div>' +
+                        '<div>Лайкайте анкеты — и здесь появятся ваши совпадения.</div>';
+                } else {
+                    empty.innerHTML = '<div class="chats-empty-icon">🔍</div><div>Ничего не найдено</div>';
+                }
+                listEl.appendChild(empty);
+                return;
+            }
+
+            filtered.forEach(id => {
+                const profile = getProfileById(id);
+                if (!profile) return;
+                const chat = chats[id] || { messages: [], unread: 0 };
+
+                const row = document.createElement('div');
+                row.className = 'chat-row';
+                row.onclick = function() { openDialog(id); };
+
+                const avatar = document.createElement('div');
+                avatar.className = 'chat-avatar';
+                const img = document.createElement('img');
+                img.src = profile.photos[0];
+                img.alt = profile.name;
+                avatar.appendChild(img);
+
+                const info = document.createElement('div');
+                info.className = 'chat-info';
+
+                const topLine = document.createElement('div');
+                topLine.className = 'chat-top-line';
+                const nameEl = document.createElement('div');
+                nameEl.className = 'chat-name';
+                nameEl.innerText = profile.name + ', ' + profile.age;
+                const timeEl = document.createElement('div');
+                timeEl.className = 'chat-time';
+                const lastMsg = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
+                timeEl.innerText = lastMsg ? formatTime(lastMsg.ts) : '';
+                topLine.appendChild(nameEl);
+                topLine.appendChild(timeEl);
+
+                const bottomLine = document.createElement('div');
+                bottomLine.className = 'chat-bottom-line';
+                const previewEl = document.createElement('div');
+                previewEl.className = 'chat-preview' + (chat.unread > 0 ? ' is-unread' : '');
+                if (lastMsg) {
+                    previewEl.innerText = (lastMsg.out ? 'Вы: ' : '') + lastMsg.text;
+                } else {
+                    previewEl.innerText = 'Начните общение 👋';
+                    previewEl.style.fontStyle = 'italic';
+                }
+                bottomLine.appendChild(previewEl);
+
+                if (chat.unread > 0) {
+                    const badge = document.createElement('div');
+                    badge.className = 'chat-unread-badge';
+                    badge.innerText = chat.unread > 99 ? '99+' : chat.unread;
+                    bottomLine.appendChild(badge);
+                }
+
+                info.appendChild(topLine);
+                info.appendChild(bottomLine);
+
+                row.appendChild(avatar);
+                row.appendChild(info);
+                listEl.appendChild(row);
+            });
+        }
+
+        function filterChats() {
+            renderChatsList();
+        }
+
+        function updateChatsBadge() {
+            let total = 0;
+            Object.keys(chats).forEach(id => {
+                if (chats[id].unread) total += chats[id].unread;
+            });
+            const badge = document.getElementById('nav-chats-badge');
+            if (total > 0) {
+                badge.innerText = total > 99 ? '99+' : total;
+                badge.classList.add('is-visible');
+            } else {
+                badge.classList.remove('is-visible');
+            }
+        }
+
+        let activeChatId = null;
+
+        function openDialog(profileId) {
+            const profile = getProfileById(profileId);
+            if (!profile) return;
+
+            const chat = ensureChat(profileId);
+            chat.unread = 0;
+            saveChats();
+            updateChatsBadge();
+
+            activeChatId = profileId;
+
+            document.getElementById('dialog-avatar-img').src = profile.photos[0];
+            document.getElementById('dialog-header-name').innerText = profile.name + ', ' + profile.age;
+            document.getElementById('dialog-header-status').innerText = 'Онлайн';
+
+            renderDialogMessages();
+
+            const inputEl = document.getElementById('dialog-input');
+            inputEl.value = '';
+            inputEl.style.height = '40px';
+            onDialogInput();
+
+            document.getElementById('dialog-screen').classList.add('is-open');
+            setTimeout(() => {
+                const msgs = document.getElementById('dialog-messages');
+                msgs.scrollTop = msgs.scrollHeight;
+                onDialogInput();
+            }, 50);
+        }
+
+        function closeDialog() {
+            document.getElementById('dialog-screen').classList.remove('is-open');
+            activeChatId = null;
+            renderChatsList();
+        }
+
+        function renderDialogMessages() {
+            if (activeChatId == null) return;
+            const chat = ensureChat(activeChatId);
+            const container = document.getElementById('dialog-messages');
+            container.innerHTML = '';
+
+            if (chat.messages.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'dialog-empty';
+                empty.innerHTML = '<span class="dialog-empty-icon">👋</span>' +
+                    '<div>Это начало вашей истории. Напишите первым!</div>';
+                container.appendChild(empty);
+                return;
+            }
+
+            chat.messages.forEach(msg => {
+                const row = document.createElement('div');
+                row.className = 'msg-row ' + (msg.out ? 'out' : 'in');
+                const bubble = document.createElement('div');
+                bubble.className = 'msg-bubble';
+                bubble.innerText = msg.text;
+                const time = document.createElement('div');
+                time.className = 'msg-time';
+                time.innerText = formatTime(msg.ts);
+                row.appendChild(bubble);
+                row.appendChild(time);
+                container.appendChild(row);
+            });
+        }
+
+        function onDialogInput() {
+            const input = document.getElementById('dialog-input');
+            const send = document.getElementById('dialog-send');
+            const hasText = input.value.trim().length > 0;
+            send.disabled = !hasText;
+            input.style.height = '40px';
+            if (input.scrollHeight > 40) {
+                input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+            }
+        }
+
+        function sendMessage() {
+            if (activeChatId == null) return;
+            const input = document.getElementById('dialog-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chat = ensureChat(activeChatId);
+            chat.messages.push({
+                id: 'm' + Date.now() + Math.random().toString(36).slice(2, 7),
+                text: text, out: true, ts: Date.now()
+            });
+            saveChats();
+
+            input.value = '';
+            input.style.height = '40px';
+            onDialogInput();
+
+            renderDialogMessages();
+            const container = document.getElementById('dialog-messages');
+            container.scrollTop = container.scrollHeight;
+
+            const chatIdCopy = activeChatId;
+            setTimeout(() => {
+                if (!chats[chatIdCopy]) return;
+                const reply = autoReplies[Math.floor(Math.random() * autoReplies.length)];
+                chats[chatIdCopy].messages.push({
+                    id: 'm' + Date.now() + Math.random().toString(36).slice(2, 7),
+                    text: reply, out: false, ts: Date.now()
+                });
+                if (activeChatId === chatIdCopy) {
+                    chats[chatIdCopy].unread = 0;
+                } else {
+                    chats[chatIdCopy].unread = (chats[chatIdCopy].unread || 0) + 1;
+                }
+                saveChats();
+                updateChatsBadge();
+                if (activeChatId === chatIdCopy) {
+                    renderDialogMessages();
+                    const c = document.getElementById('dialog-messages');
+                    c.scrollTop = c.scrollHeight;
+                }
+                renderChatsList();
+            }, 1200 + Math.random() * 800);
+        }
+
+        document.getElementById('dialog-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (!document.getElementById('dialog-send').disabled) sendMessage();
+            }
+        });
 
         const audio = document.getElementById('audio-player');
         const card = document.getElementById('card-container');
@@ -1034,6 +2300,8 @@
         const starBtn = document.getElementById('star-btn');
         const photoTrack = document.getElementById('photo-track');
         const cardCounter = document.getElementById('card-counter');
+        const btnPlay = document.getElementById('btn-play');
+        const btnTrackHeart = document.getElementById('btn-track-heart');
 
         let currentPhotoIndex = 0;
         let currentPhotos = [];
@@ -1044,10 +2312,89 @@
             toast.innerText = text;
             toast.classList.add('is-visible');
             if (toastTimer) clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => {
-                toast.classList.remove('is-visible');
-            }, 1800);
+            toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 1800);
         }
+
+        function updatePlayButton() {
+            if (audio.paused) {
+                btnPlay.innerHTML = ICON_PLAY;
+                btnPlay.setAttribute('aria-label', 'Play');
+            } else {
+                btnPlay.innerHTML = ICON_PAUSE;
+                btnPlay.setAttribute('aria-label', 'Pause');
+            }
+        }
+
+        audio.addEventListener('play', updatePlayButton);
+        audio.addEventListener('pause', updatePlayButton);
+        audio.addEventListener('ended', function() {
+            updatePlayButton();
+            document.getElementById('music-progress').style.width = '0%';
+            document.getElementById('music-current-time').innerText = '0:00';
+        });
+        audio.addEventListener('loadedmetadata', function() {
+            const tm = Math.floor(audio.duration / 60);
+            const ts = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+            document.getElementById('music-total-time').innerText = tm + ':' + ts;
+        });
+
+        function togglePlay() {
+            if (currentProfileIndex >= profiles.length) return;
+            if (!audio.src) return;
+            if (audio.paused) {
+                audio.play().catch(e => {
+                    console.log('Ошибка воспроизведения:', e);
+                    showToast('Не удалось воспроизвести трек');
+                    updatePlayButton();
+                });
+            } else {
+                audio.pause();
+            }
+        }
+
+        function seekBy(seconds) {
+            if (!audio.src || isNaN(audio.duration)) return;
+            audio.currentTime = Math.max(0, Math.min(audio.duration, audio.currentTime + seconds));
+        }
+
+        function toggleTrackLike() {
+            if (currentProfileIndex >= profiles.length) return;
+            const profile = profiles[currentProfileIndex];
+            if (!profile) return;
+            if (likedTracks.has(profile.id)) {
+                likedTracks.delete(profile.id);
+                btnTrackHeart.classList.remove('is-liked');
+                showToast('Трек убран из любимых');
+            } else {
+                likedTracks.add(profile.id);
+                btnTrackHeart.classList.add('is-liked');
+                showToast('❤️ Трек в любимых');
+            }
+            saveLikedTracks();
+        }
+
+        function updateTrackHeart() {
+            if (currentProfileIndex >= profiles.length) {
+                btnTrackHeart.classList.remove('is-liked');
+                return;
+            }
+            const profile = profiles[currentProfileIndex];
+            if (profile && likedTracks.has(profile.id)) {
+                btnTrackHeart.classList.add('is-liked');
+            } else {
+                btnTrackHeart.classList.remove('is-liked');
+            }
+        }
+
+        audio.ontimeupdate = function() {
+            if (audio.duration && !isNaN(audio.duration)) {
+                const percentage = (audio.currentTime / audio.duration) * 100;
+                document.getElementById('music-progress').style.width = percentage + '%';
+                const cm = Math.floor(audio.currentTime / 60);
+                const cs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+                document.getElementById('music-current-time').innerText = cm + ':' + cs;
+            }
+        };
 
         function updateStarButton() {
             if (currentProfileIndex >= profiles.length) return;
@@ -1060,12 +2407,10 @@
             starBtn.innerText = '⭐';
         }
 
-        // ===== ГАЛЕРЕЯ КАРТОЧКИ =====
         function renderPhotos(photos) {
             currentPhotos = photos;
             currentPhotoIndex = 0;
             photoTrack.innerHTML = '';
-
             photos.forEach((url, i) => {
                 const slide = document.createElement('div');
                 slide.className = 'photo-slide';
@@ -1076,7 +2421,6 @@
                 slide.appendChild(img);
                 photoTrack.appendChild(slide);
             });
-
             updatePhotoPosition(false);
         }
 
@@ -1106,57 +2450,42 @@
 
         (function setupPhotoSwipe() {
             const holder = document.getElementById('card-image-holder');
-            let startX = 0;
-            let startY = 0;
-            let isDragging = false;
-            let isHorizontal = null;
-            let deltaX = 0;
+            let startX = 0, startY = 0, isDragging = false, isHorizontal = null, deltaX = 0;
 
             function onDown(e) {
                 if (isAnimating) return;
                 if (e.target.closest('.photo-arrow')) return;
-
                 const point = e.touches ? e.touches[0] : e;
                 startX = point.clientX;
                 startY = point.clientY;
                 deltaX = 0;
                 isDragging = true;
                 isHorizontal = null;
-
                 photoTrack.style.transition = 'none';
             }
-
             function onMove(e) {
                 if (!isDragging) return;
                 const point = e.touches ? e.touches[0] : e;
                 const dx = point.clientX - startX;
                 const dy = point.clientY - startY;
-
                 if (isHorizontal === null) {
                     if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
                         isHorizontal = Math.abs(dx) > Math.abs(dy);
-                    } else {
-                        return;
-                    }
+                    } else { return; }
                 }
                 if (!isHorizontal) return;
-
                 if (e.cancelable) e.preventDefault();
                 deltaX = dx;
                 const base = -currentPhotoIndex * 100;
                 const offsetPercent = (dx / holder.offsetWidth) * 100;
                 photoTrack.style.transform = 'translateX(' + (base + offsetPercent) + '%)';
             }
-
             function onUp() {
                 if (!isDragging) return;
                 isDragging = false;
-
                 const threshold = holder.offsetWidth * 0.15;
                 const wasHorizontal = isHorizontal;
-
                 photoTrack.style.transition = 'transform 0.3s ease';
-
                 if (wasHorizontal) {
                     if (deltaX < -threshold) {
                         if (currentPhotoIndex < currentPhotos.length - 1) currentPhotoIndex++;
@@ -1166,12 +2495,10 @@
                 }
                 updatePhotoPosition(true);
             }
-
             holder.addEventListener('touchstart', onDown, { passive: true });
             holder.addEventListener('touchmove', onMove, { passive: false });
             holder.addEventListener('touchend', onUp);
             holder.addEventListener('touchcancel', onUp);
-
             holder.addEventListener('mousedown', function(e) {
                 if (e.button !== 0) return;
                 onDown(e);
@@ -1180,14 +2507,11 @@
             window.addEventListener('mouseup', onUp);
         })();
 
-        // ===== РЕНДЕР АНКЕТЫ =====
         function renderProfile(index) {
             if (index >= profiles.length) {
                 audio.pause();
-                isPlaying = false;
                 card.style.display = 'none';
                 actionButtonsRow.style.display = 'none';
-
                 let endMsg = document.getElementById('end-message');
                 if (!endMsg) {
                     endMsg = document.createElement('div');
@@ -1201,13 +2525,11 @@
 
             card.style.display = '';
             actionButtonsRow.style.display = '';
-
             const profile = profiles[index];
-
             renderPhotos(profile.photos);
 
-            document.getElementById('card-title').innerText = profile.name + ", " + profile.age;
-            document.getElementById('card-geo').innerText = "📍 " + profile.geo;
+            document.getElementById('card-title').innerText = profile.name + ', ' + profile.age;
+            document.getElementById('card-geo').innerText = '📍 ' + profile.geo;
             document.getElementById('card-bio').innerText = profile.bio;
 
             const tagsContainer = document.getElementById('card-tags');
@@ -1222,35 +2544,33 @@
             document.getElementById('music-name').innerText = profile.track;
             document.getElementById('music-artist').innerText = profile.artist;
 
+            audio.pause();
             audio.src = profile.audioUrl;
-            isPlaying = false;
-            document.querySelector('.music-btn-play').innerText = "▶️";
-            document.getElementById('music-progress').style.width = "0%";
-            document.getElementById('music-current-time').innerText = "0:00";
+            audio.load();
+            document.getElementById('music-progress').style.width = '0%';
+            document.getElementById('music-current-time').innerText = '0:00';
+            document.getElementById('music-total-time').innerText = '0:00';
+            updatePlayButton();
+
+            updateStarButton();
+            updateTrackHeart();
 
             card.classList.remove('swipe-left', 'swipe-right', 'fade-in', 'star-pulse');
             void card.offsetWidth;
             card.classList.add('fade-in');
-            setTimeout(() => {
-                card.classList.remove('fade-in');
-            }, 320);
-
-            updateStarButton();
+            setTimeout(() => card.classList.remove('fade-in'), 320);
         }
 
-        // ===== ДЕЙСТВИЯ =====
         function clickAction(actionType) {
             if (isAnimating) return;
             if (currentProfileIndex >= profiles.length) return;
-
             const profile = profiles[currentProfileIndex];
             if (!profile) return;
 
             if (actionType === 'star') {
                 try {
                     if (favorites.includes(profile.id)) {
-                        const idx = favorites.indexOf(profile.id);
-                        favorites.splice(idx, 1);
+                        favorites.splice(favorites.indexOf(profile.id), 1);
                         saveFavorites();
                         updateStarButton();
                         showToast('Удалено из избранного');
@@ -1264,25 +2584,17 @@
                     void card.offsetWidth;
                     card.classList.add('star-pulse');
                     setTimeout(() => card.classList.remove('star-pulse'), 500);
-                } catch (e) {
-                    console.error('Ошибка в star-логике:', e);
-                }
+                } catch (e) { console.error(e); }
                 return;
             }
 
             isAnimating = true;
-
-            const safetyTimer = setTimeout(() => {
-                if (isAnimating) isAnimating = false;
-            }, 1500);
+            const safetyTimer = setTimeout(() => { if (isAnimating) isAnimating = false; }, 1500);
 
             try {
                 audio.pause();
-                isPlaying = false;
-
                 card.classList.remove('fade-in', 'swipe-left', 'swipe-right', 'star-pulse');
                 void card.offsetWidth;
-
                 if (actionType === 'dislike') {
                     card.classList.add('swipe-left');
                 } else {
@@ -1292,11 +2604,14 @@
                 setTimeout(() => {
                     try {
                         card.classList.remove('swipe-left', 'swipe-right');
+                        if (actionType === 'like') {
+                            ensureChat(profile.id);
+                            saveChats();
+                            updateChatsBadge();
+                        }
                         currentProfileIndex++;
                         renderProfile(currentProfileIndex);
-
-                        if (actionType === 'like' &&
-                            window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showPopup) {
+                        if (actionType === 'like' && window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showPopup) {
                             try {
                                 window.Telegram.WebApp.showPopup({
                                     title: 'Это Мэтч! 🎉',
@@ -1306,78 +2621,31 @@
                                         { id: 'later', type: 'cancel', text: 'Позже' }
                                     ]
                                 }, function(buttonId) {
-                                    if (buttonId === 'chat' && window.Telegram.WebApp.sendData) {
-                                        try {
-                                            window.Telegram.WebApp.sendData(JSON.stringify({
-                                                action: 'open_chat',
-                                                with: profile.name
-                                            }));
-                                        } catch (e) {}
+                                    if (buttonId === 'chat') {
+                                        changeTabById('chats');
+                                        openDialog(profile.id);
                                     }
                                 });
-                            } catch (e) {
-                                console.error('Ошибка showPopup:', e);
-                            }
+                            } catch (e) { console.error(e); }
                         }
-                    } catch (e) {
-                        console.error('Ошибка в основном setTimeout:', e);
-                    } finally {
+                    } catch (e) { console.error(e); }
+                    finally {
                         clearTimeout(safetyTimer);
                         isAnimating = false;
                     }
                 }, 400);
             } catch (e) {
-                console.error('Ошибка в clickAction:', e);
+                console.error(e);
                 clearTimeout(safetyTimer);
                 isAnimating = false;
             }
         }
 
-        function togglePlay() {
-            if (currentProfileIndex >= profiles.length) return;
-
-            const playBtn = document.querySelector('.music-btn-play');
-            if (isPlaying) {
-                audio.pause();
-                playBtn.innerText = "▶️";
-            } else {
-                audio.play().catch(e => console.log("Ошибка воспроизведения звука: ", e));
-                playBtn.innerText = "⏸";
-            }
-            isPlaying = !isPlaying;
-        }
-
-        audio.ontimeupdate = function() {
-            if (audio.duration && !isNaN(audio.duration)) {
-                const percentage = (audio.currentTime / audio.duration) * 100;
-                document.getElementById('music-progress').style.width = percentage + "%";
-
-                const cm = Math.floor(audio.currentTime / 60);
-                const cs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
-                document.getElementById('music-current-time').innerText = cm + ":" + cs;
-
-                const tm = Math.floor(audio.duration / 60);
-                const ts = Math.floor(audio.duration % 60).toString().padStart(2, '0');
-                document.getElementById('music-total-time').innerText = tm + ":" + ts;
-            }
-        };
-
-        audio.onended = function() {
-            isPlaying = false;
-            const playBtn = document.querySelector('.music-btn-play');
-            if (playBtn) playBtn.innerText = "▶️";
-            document.getElementById('music-progress').style.width = "0%";
-            document.getElementById('music-current-time').innerText = "0:00";
-        };
-
-        // ===== ЭКРАН ПРОФИЛЯ =====
         function renderMyProfile() {
-            // Обложка и основное
             document.getElementById('profile-cover-img').src = myProfile.photos[0];
-            document.getElementById('my-name').innerText = myProfile.name + ", " + myProfile.age;
-            document.getElementById('my-geo').innerText = "📍 " + myProfile.geo;
+            document.getElementById('my-name').innerText = myProfile.name + ', ' + myProfile.age;
+            document.getElementById('my-geo').innerText = '📍 ' + myProfile.geo;
 
-            // Мои фото
             const grid = document.getElementById('my-photos-grid');
             grid.innerHTML = '';
             myProfile.photos.forEach(url => {
@@ -1391,19 +2659,15 @@
                 grid.appendChild(cell);
             });
 
-            // Статистика (лайки можно привязать к избранному)
             document.getElementById('stat-likes').innerText = '128';
-            document.getElementById('stat-matches').innerText = '14';
+            document.getElementById('stat-matches').innerText = Object.keys(chats).length || '0';
             document.getElementById('stat-views').innerText = '1.2k';
-
-            // Избранное
             renderFavoritesList();
         }
 
         function renderFavoritesList() {
             const list = document.getElementById('fav-list');
             list.innerHTML = '';
-
             if (favorites.length === 0) {
                 const empty = document.createElement('div');
                 empty.className = 'fav-empty';
@@ -1411,29 +2675,24 @@
                 list.appendChild(empty);
                 return;
             }
-
             favorites.forEach(favId => {
                 const profile = profiles.find(p => p.id === favId);
                 if (!profile) return;
-
                 const item = document.createElement('div');
                 item.className = 'fav-item';
-
                 const img = document.createElement('img');
                 img.src = profile.photos[0];
                 img.alt = profile.name;
-
                 const info = document.createElement('div');
                 info.className = 'fav-item-info';
                 const nameEl = document.createElement('div');
                 nameEl.className = 'fav-item-name';
-                nameEl.innerText = profile.name + ", " + profile.age;
+                nameEl.innerText = profile.name + ', ' + profile.age;
                 const subEl = document.createElement('div');
                 subEl.className = 'fav-item-sub';
                 subEl.innerText = '📍 ' + profile.geo;
                 info.appendChild(nameEl);
                 info.appendChild(subEl);
-
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'fav-item-remove';
                 removeBtn.innerText = '✕';
@@ -1448,7 +2707,6 @@
                     }
                     showToast('Удалено из избранного');
                 };
-
                 item.appendChild(img);
                 item.appendChild(info);
                 item.appendChild(removeBtn);
@@ -1456,7 +2714,6 @@
             });
         }
 
-        // Модалка просмотра фото
         function openPhotoViewer(url) {
             document.getElementById('photo-viewer-img').src = url;
             document.getElementById('photo-viewer').classList.add('is-open');
@@ -1466,43 +2723,43 @@
             document.getElementById('photo-viewer').classList.remove('is-open');
         }
 
-        // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
-        function changeTab(tabId, evt) {
-            // Снимаем активность со всех кнопок навигации
+        function changeTabById(tabId) {
             document.querySelectorAll('.nav-button-item').forEach(function(btn) {
                 btn.classList.remove('is-active');
             });
-            if (evt && evt.currentTarget) {
-                evt.currentTarget.classList.add('is-active');
-            }
+            const navBtn = document.getElementById('nav-' + tabId);
+            if (navBtn) navBtn.classList.add('is-active');
 
-            // Прячем все экраны
             document.querySelectorAll('.screen').forEach(function(s) {
                 s.classList.remove('is-active');
             });
 
-            // Показываем нужный
             if (tabId === 'cards') {
                 document.getElementById('screen-cards').classList.add('is-active');
+            } else if (tabId === 'chats') {
+                document.getElementById('screen-chats').classList.add('is-active');
+                renderChatsList();
+                updateChatsBadge();
+            } else if (tabId === 'top') {
+                document.getElementById('screen-top').classList.add('is-active');
+                renderTop();
             } else if (tabId === 'profile') {
                 document.getElementById('screen-profile').classList.add('is-active');
                 renderMyProfile();
-            } else if (tabId === 'chats') {
-                showToast('Чаты скоро 😉');
-                // Возвращаем активной «Анкеты», чтобы не пустовал экран
-                document.querySelectorAll('.nav-button-item').forEach(b => b.classList.remove('is-active'));
-                document.getElementById('nav-cards').classList.add('is-active');
-                document.getElementById('screen-cards').classList.add('is-active');
-            } else if (tabId === 'top') {
-                showToast('Топ-100 скоро 😉');
-                document.querySelectorAll('.nav-button-item').forEach(b => b.classList.remove('is-active'));
-                document.getElementById('nav-cards').classList.add('is-active');
-                document.getElementById('screen-cards').classList.add('is-active');
             }
         }
 
-        // ===== СТАРТ =====
+        function changeTab(tabId, evt) {
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('is-active');
+            }
+            changeTabById(tabId);
+        }
+
         renderProfile(currentProfileIndex);
+        updatePlayButton();
+        updateChatsBadge();
+        renderTop();
     </script>
 </body>
 </html>
